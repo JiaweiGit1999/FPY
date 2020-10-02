@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C8E0FF"
+    tools:context=".Profile">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="158dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/undo"
+            android:layout_marginTop="30dp"
+            android:visibility="visible" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_marginRight="50dp"
+            android:text="Profile"
+            android:textColor="#383A4F"
+            android:textSize="25dp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/Puser"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/wel"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_oval="true"/>
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Profile Picture"
+        android:layout_below="@id/Puser"
+        android:layout_marginTop="10dp"
+        android:textSize="16dp"
+        android:textColor="#006FFF"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/Pname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:textSize="16dp"
+        android:textColor="#006FFF"
+        android:textStyle="bold"
+        android:text="Name"
+
+        />
+
+    <EditText
+        android:id="@+id/Ename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Pname"
+        android:layout_marginLeft="25dp"
+        android:ems="10" />
+    <TextView
+        android:id="@+id/Pemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Ename"
+        android:layout_marginLeft="30dp"
+        android:text="Email"
+        android:textSize="16dp"
+        android:textColor="#006FFF"
+        android:textStyle="bold"
+
+        />
+    <EditText
+        android:id="@+id/Eemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginLeft="25dp"
+        android:layout_below="@id/Pemail"
+        />
+    <TextView
+        android:id="@+id/Pphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone Number"
+        android:layout_marginLeft="30dp"
+        android:textSize="16dp"
+        android:textColor="#006FFF"
+        android:textStyle="bold"
+        android:layout_below="@id/Eemail"
+
+        />
+    <EditText
+        android:id="@+id/Ephone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_below="@id/Pphone"
+        android:layout_marginLeft="25dp"
+        />
+    <TextView
+        android:id="@+id/Pgender"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@id/Ephone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender"
+        android:textSize="16dp"
+        android:textColor="#006FFF"
+        android:textStyle="bold"
+        />
+    <EditText
+        android:id="@+id/Egender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginLeft="25dp"
+        android:layout_below="@id/Pgender"
+        />
+    <TextView
+        android:id="@+id/Punit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unit Number"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@id/Egender"
+        android:textSize="16dp"
+        android:textColor="#006FFF"
+        android:textStyle="bold"
+
+        />
+    <EditText
+        android:id="@+id/Eunit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginLeft="25dp"
+        android:layout_below="@id/Punit"
+        />
+
+    <Button
+        android:id="@+id/Bsave"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/Eunit"
+        />
+
+
+</RelativeLayout>

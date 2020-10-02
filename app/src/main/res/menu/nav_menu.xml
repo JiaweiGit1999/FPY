@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/profile11"
+        android:icon="@drawable/pencil"
+        android:title="Edit Profile"/>
+
+    <item
+        android:id="@+id/reminder"
+        android:icon="@drawable/bell"
+        android:title="Reminder"/>
+
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/history"
+        android:title="Payment History"/>
+    <item
+        android:id="@+id/password"
+        android:icon="@drawable/key"
+        android:title="Change Password"/>
+</menu>

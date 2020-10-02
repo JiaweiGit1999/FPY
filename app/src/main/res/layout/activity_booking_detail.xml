@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".booking_detail">
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/undo"
+                android:layout_marginTop="30dp"
+                android:visibility="visible" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:layout_marginRight="50dp"
+                android:text="Facilities"
+                android:textColor="#383A4F"
+                android:textSize="25dp" />
+
+        </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="#5F6392"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="Booking Details" />
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="50dp"
+            android:background="#C8E0FF"
+            >
+
+            <TextView
+                android:id="@+id/Ffacility"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="#5F6392"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:text="Booking Facility" />
+
+            <TextView
+                android:id="@+id/FtextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="#5F6392"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:layout_below="@+id/Ffacility"
+
+                />
+
+            <TextView
+                android:id="@+id/Fdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="#5F6392"
+                android:textStyle="bold"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:layout_below="@+id/FtextView"
+                />
+
+            <TextView
+                android:id="@+id/DtextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:layout_below="@+id/Fdate"
+                />
+
+            <TextView
+                android:id="@+id/FTime"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textColor="#5F6392"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:layout_below="@+id/DtextView"
+                />
+
+            <TextView
+                android:id="@+id/TtextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:layout_below="@+id/FTime"
+                />
+
+            <TextView
+                android:id="@+id/Fduration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Duration"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:textColor="#5F6392"
+                android:layout_below="@+id/TtextView"/>
+
+            <TextView
+                android:id="@+id/DutextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Fduration"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="19dp"
+                android:text="TextView" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Confirm"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/login_button"
+            />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

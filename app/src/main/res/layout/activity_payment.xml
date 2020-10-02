@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Payment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/undo"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
+            android:text="Payment"
+            android:textColor="#383A4F"
+            android:textSize="25dp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:text="RM10000"
+        android:textColor="#CCA679"
+        android:textSize="50dp"
+        android:gravity="center"
+
+        android:layout_below="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Due"
+        android:gravity="center"
+        android:layout_below="@id/amount" />
+
+    <TextView
+        android:id="@+id/payby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textSize="25dp"
+        android:textColor="#5F6392"
+        android:layout_marginTop="60dp"
+        android:text="Pay by"
+        android:layout_below="@id/total" />
+
+    <EditText
+        android:id="@+id/Epayby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="20"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/payby"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/paymentdetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment Details"
+        android:layout_marginLeft="20dp"
+        android:textSize="25dp"
+        android:textColor="#5F6392"
+        android:layout_below="@id/Epayby"
+        />
+
+    <EditText
+        android:id="@+id/Edetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_below="@id/paymentdetail"
+        android:layout_marginLeft="20dp"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/ordernumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textSize="25dp"
+        android:textColor="#5F6392"
+        android:layout_below="@id/Edetail"
+        android:text="Order Number" />
+
+    <EditText
+        android:id="@+id/Eordernumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/ordernumber"
+        android:inputType="textPersonName"
+        android:text="Name" />
+    <Button
+        android:id="@+id/Bsave"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/Eordernumber"
+        />
+
+</RelativeLayout>

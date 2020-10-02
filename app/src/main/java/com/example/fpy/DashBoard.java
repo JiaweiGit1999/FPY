@@ -19,18 +19,20 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
 
-
-
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
+        mAuth = FirebaseAuth.getInstance();
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
         NavigationView navigationView=findViewById(R.id.navview);
@@ -51,6 +53,12 @@ public class DashBoard extends AppCompatActivity {
                         return true;
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.logout:
+                        mAuth.signOut();
+                        //send to main activity
+                        Intent logoutintent = new Intent(DashBoard.this, login.class);
+                        startActivity(logoutintent);
                         return true;
 
                 }
@@ -93,10 +101,6 @@ public class DashBoard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
     }
 
     @Override

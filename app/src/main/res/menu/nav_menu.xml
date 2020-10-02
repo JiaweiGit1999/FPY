@@ -18,5 +18,8 @@
     <item
         android:id="@+id/password"
         android:icon="@drawable/key"
-        android:title="Change Password"/>
+        android:title="Change Password" />
+    <item
+        android:id="@+id/logout"
+        android:title="Logout" />
 </menu>

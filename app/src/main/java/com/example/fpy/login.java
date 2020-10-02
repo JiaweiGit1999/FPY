@@ -63,4 +63,16 @@ public class login extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            //send to main activit
+            Intent intent = new Intent(login.this, DashBoard.class);
+            startActivity(intent);
+        }
+    }
 }

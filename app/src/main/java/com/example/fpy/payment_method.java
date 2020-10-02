@@ -25,3 +25,4 @@ public class payment_method extends AppCompatActivity {
         });
     }
 }
+

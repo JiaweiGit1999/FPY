@@ -2,6 +2,7 @@ package com.example.fpy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +24,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
-
+    boolean doubleBackToExitPressedOnce = false;
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -127,6 +129,25 @@ public class DashBoard extends AppCompatActivity {
         slider.setAutoStart(true);
         slider.setInAnimation(this,android.R.anim.slide_in_left);
         slider.setInAnimation(this,android.R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
 

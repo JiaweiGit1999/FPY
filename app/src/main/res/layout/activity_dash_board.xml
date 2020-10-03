@@ -45,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/welcome"
                 android:layout_marginLeft="20dp"
-                android:text="UserName"
                 android:textColor="#CCA679"
                 android:textSize="100px" />
 

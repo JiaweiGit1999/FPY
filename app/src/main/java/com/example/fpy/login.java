@@ -19,9 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class login extends AppCompatActivity {
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
     EditText emailview,passwordview;
     TextView message,forgotpassword;
@@ -68,13 +71,7 @@ public class login extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("Sign in: ", "signInWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser();
-
-                                        Intent intent = new Intent(login.this,DashBoard.class);
-                                        //put uid in intent
-                                        intent.putExtra("UID", user.getUid());
-                                        //send to main activity
-                                        startActivity(intent);
+                                        loginsuccess();
 
                                     } else {
                                         // If sign in fails, display a message to the user.
@@ -89,18 +86,38 @@ public class login extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            //send to main activity
-            Intent intent = new Intent(login.this, DashBoard.class);
-            //put uid in intent
-            intent.putExtra("UID", currentUser.getUid());
-            //send to main activity
-            startActivity(intent);
-        }
+    public void loginsuccess(){
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        DocumentReference docRef = db.collection("landlord").document(currentUser.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        Log.d("Document: ", currentUser.getUid());
+
+                        //set global variables
+                        User user= User.getInstance();
+                        user.setUid(currentUser.getUid());
+
+                        user.setUsername(document.getString("name"));
+                        user.setGender(document.getString("gender"));
+                        user.setIc(document.getString("ic"));
+                        user.setEmail(document.getString("email"));
+                        user.setContact(document.getString("contact"));
+
+                        //send to main activity
+                        Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Log.d("Document: ", "No such document");
+                    }
+                } else {
+                    Log.d("Document: ", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

@@ -1,7 +1,9 @@
 package com.example.fpy;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,20 +20,60 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
-
+    private String username,email,contact,ic;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+        //Get firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //Check for intent of user uid
+        String UID = "did not receive intent.";
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                UID= null;
+            } else {
+                UID= extras.getString("UID");
+            }
+        } else {
+            UID= (String) savedInstanceState.getSerializable("UID");
+        }
+        Log.d("Intent Status: ",UID);
+        DocumentReference docRef = db.collection("landlord").document(UID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        Log.d("Document: ", document.getString("name")); //Print the name
+                        username = document.getString("name");
+                        ic = document.getString("ic");
+                        contact = document.getString("contact");
+                        email = document.getString("email");
+                    } else {
+                        Log.d("Document: ", "No such document");
+                    }
+                } else {
+                    Log.d("Document: ", "get failed with ", task.getException());
+                }
+            }
+        });
         mAuth = FirebaseAuth.getInstance();
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);

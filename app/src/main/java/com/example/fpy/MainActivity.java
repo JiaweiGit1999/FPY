@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                                     //set global variables
                                     User user= User.getInstance();
                                     user.setUid(currentUser.getUid());
-
                                     user.setUsername(document.getString("name"));
                                     user.setGender(document.getString("gender"));
                                     user.setIc(document.getString("ic"));

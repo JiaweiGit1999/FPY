@@ -13,6 +13,7 @@ public class User extends Application {
     private String email;
     private String gender;
     private String uid;
+    private String imageurl;
 
     public User() {
     }
@@ -20,6 +21,14 @@ public class User extends Application {
         if (instance == null)
             instance = new User();
         return instance;
+    }
+
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
+    }
+
+    public String getImageurl() {
+        return imageurl;
     }
 
     public String getUid() {

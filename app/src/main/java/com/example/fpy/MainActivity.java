@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                                     user.setIc(document.getString("ic"));
                                     user.setEmail(document.getString("email"));
                                     user.setContact(document.getString("contact"));
+                                    user.setImageurl(document.getString("imageurl"));
+
 
                                     //send to main activity
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);

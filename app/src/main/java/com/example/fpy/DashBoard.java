@@ -110,7 +110,7 @@ public class DashBoard extends AppCompatActivity {
             }
         });
 
-        //on nav view clicked
+        //on nav view clicked show nav
         findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

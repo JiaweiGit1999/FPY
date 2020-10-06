@@ -10,7 +10,7 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
-
+//glide module
 @GlideModule
 public class MyGlideApp extends AppGlideModule {
 

@@ -58,14 +58,19 @@ public class DashBoard extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
         //firebase services
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         final User user = User.getInstance();
+
         //firebase links
         docRef = db.collection("landlord").document(user.getUid());
-        mStorageRef = FirebaseStorage.getInstance().getReference().child(user.getImageurl());
+//        Log.d("imageurl: ",user.getImageurl());
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         //views
+
         final TextView textusername = findViewById(R.id.name);
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
@@ -110,13 +115,15 @@ public class DashBoard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.END);
-                //update profile pic
-                ImageView userpic = findViewById(R.id.userpic);
-                GlideApp.with(DashBoard.this /* context */)
-                        .load(mStorageRef)
-                        .into(userpic);
+                if(user.getImageurl()!=null){
+                    //update profile pic
+                    ImageView userpic = findViewById(R.id.userpic);
+                    GlideApp.with(DashBoard.this /* context */)
+                            .load(mStorageRef.child(user.getImageurl()))
+                            .into(userpic);
+                    }
+                }
             }
-        }
         );
         //flipper images
         int images[]={R.drawable.hello,R.drawable.wel};

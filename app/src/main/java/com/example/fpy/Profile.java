@@ -79,9 +79,11 @@ public class Profile extends AppCompatActivity {
         ephone.setText(user.getContact());
         egender.setText(user.getGender());
         eemail.setText(user.getEmail());
-        GlideApp.with(this /* context */)
-                .load(mStorageRef.child(user.getImageurl()))
-                .into(profilepic);
+        if(user.getImageurl()!=null){
+            GlideApp.with(this /* context */)
+                    .load(mStorageRef.child(user.getImageurl()))
+                    .into(profilepic);
+        }
 
         //set data change listener on firestore
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -111,10 +113,11 @@ public class Profile extends AppCompatActivity {
                 //Data to be updated in firestore
                 Map<String, Object> update = new HashMap<>();
                 if(mUploadTask != null && mUploadTask.isInProgress()){
+                    Log.d("image update status: ","no image selected");
+                }else{
                     uploadFile();
                     update.put("imageurl", user.getUid()+"." + getFileExtension(mImageUri));
                 }
-
 
                 update.put("name", ename.getText().toString());
                 update.put("contact", ephone.getText().toString());

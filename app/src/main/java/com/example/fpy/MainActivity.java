@@ -19,9 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -39,14 +36,6 @@ public class MainActivity extends AppCompatActivity {
         logo_Animation= AnimationUtils.loadAnimation(this,R.anim.logo_animation);
         logo=findViewById(R.id.imageView);
         logo.setAnimation(logo_Animation);
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                Log.d("FCM: ",task.getResult().getToken());
-            }
-        });
-
 
     }
 
@@ -72,13 +61,12 @@ public class MainActivity extends AppCompatActivity {
                                     //set global variables
                                     User user= User.getInstance();
                                     user.setUid(currentUser.getUid());
+
                                     user.setUsername(document.getString("name"));
                                     user.setGender(document.getString("gender"));
                                     user.setIc(document.getString("ic"));
                                     user.setEmail(document.getString("email"));
                                     user.setContact(document.getString("contact"));
-                                    user.setImageurl(document.getString("imageurl"));
-
 
                                     //send to main activity
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);

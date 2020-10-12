@@ -1,6 +1,5 @@
 package com.example.fpy;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +20,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,54 +28,32 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.messaging.RemoteMessage;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
-
-import java.io.InputStream;
-
-import javax.annotation.Nullable;
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
     String username,ic,contact,email,gender;
     private FirebaseAuth mAuth;
-    private StorageReference mStorageRef;
-    DocumentReference docRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
-
         //firebase services
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        final User user = User.getInstance();
+        User user = User.getInstance();
 
-        //firebase links
-        docRef = db.collection("landlord").document(user.getUid());
-//        Log.d("imageurl: ",user.getImageurl());
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        //views
 
         final TextView textusername = findViewById(R.id.name);
-        CardView cardView2 = findViewById(R.id.facility);
-        CardView cardView1 = findViewById(R.id.Payment);
 
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
         NavigationView navigationView=findViewById(R.id.navview);
-
-        //on navigator options selected
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -107,26 +80,19 @@ public class DashBoard extends AppCompatActivity {
                         return true;
 
                 }
+
                 return false;
             }
         });
 
-        //on nav view clicked show nav
         findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.END);
-                if(user.getImageurl()!=null){
-                    //update profile pic
-                    ImageView userpic = findViewById(R.id.userpic);
-                    GlideApp.with(DashBoard.this /* context */)
-                            .load(mStorageRef.child(user.getImageurl()))
-                            .into(userpic);
-                    }
-                }
             }
+
+        }
         );
-        //flipper images
         int images[]={R.drawable.hello,R.drawable.wel};
          slider = findViewById(R.id.slider1);
 
@@ -135,8 +101,8 @@ public class DashBoard extends AppCompatActivity {
             flipperimage(image);
 
         }
-        //card views on click
-        //facility card
+
+        CardView cardView2 = findViewById(R.id.facility);
         cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,7 +110,8 @@ public class DashBoard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //payment card
+
+        CardView cardView1 = findViewById(R.id.Payment);
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,26 +119,8 @@ public class DashBoard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        //on firestore data changed
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    System.err.println("Listen failed: " + e);
-                    return;
-                }
-
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    textusername.setText(documentSnapshot.getString("name"));
-                } else {
-                    System.out.print("Current data: null");
-                }
-            }
-        });
     }
 
-    //on options selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.profile11)
@@ -185,7 +134,7 @@ public class DashBoard extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //flipper image setter
+
     public void flipperimage(int image)
     {
         ImageView imageView = new ImageView(this);
@@ -197,4 +146,10 @@ public class DashBoard extends AppCompatActivity {
         slider.setInAnimation(this,android.R.anim.slide_in_left);
         slider.setInAnimation(this,android.R.anim.slide_out_right);
     }
+
+
+
+
+
+
 }

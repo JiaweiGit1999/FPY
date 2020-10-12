@@ -107,7 +107,7 @@ public class login extends AppCompatActivity {
                         user.setEmail(document.getString("email"));
                         user.setContact(document.getString("contact"));
                         user.setImageurl(document.getString("imageurl"));
-                        
+
                         //send to main activity
                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                         startActivity(intent);

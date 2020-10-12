@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+//livechat activity
 public class live_chats extends AppCompatActivity {
     //firebase services
     FirebaseFirestore db = FirebaseFirestore.getInstance();

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+//livechat adapter
 public class chatview_adapter extends RecyclerView.Adapter<chatview_adapter.Holder> {
 
     private ArrayList<Messages> messages = new ArrayList<Messages>();

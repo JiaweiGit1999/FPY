@@ -2,7 +2,7 @@ package com.example.fpy;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-
+//message object
 public class Messages {
     private String name;
     private String message;

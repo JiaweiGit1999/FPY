@@ -14,6 +14,7 @@ public class User extends Application {
     private String gender;
     private String uid;
     private String imageurl;
+    //constructor
     public User() {
     }
     public static User getInstance() {

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -39,6 +40,15 @@ public class Time_facility extends AppCompatActivity implements AdapterView.OnIt
         timePicker.setIs24HourView(true);
 
         spinner.setOnItemSelectedListener(this);
+
+        ImageView imageView = findViewById(R.id.back_button);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         List<String> category = new ArrayList<String>();
         category.add("1 hours");

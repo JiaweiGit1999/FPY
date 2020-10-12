@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 public class Facility extends AppCompatActivity {
     private Booking booking = new Booking();
@@ -28,6 +29,15 @@ public class Facility extends AppCompatActivity {
         CardView cardView2 = findViewById(R.id.Sky);
         CardView cardView3 = findViewById(R.id.ping);
         CardView cardView4 = findViewById(R.id.room);
+
+        ImageView imageView = findViewById(R.id.back_button);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override

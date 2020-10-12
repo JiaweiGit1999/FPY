@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,15 @@ public class booking_detail extends AppCompatActivity {
         TextView dateTextView = findViewById(R.id.DtextView);
         TextView timeTextView = findViewById(R.id.TtextView);
         TextView durationTextView = findViewById(R.id.DutextView);
+
+        ImageView imageView = findViewById(R.id.back_button);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         facilityTextView.setText(booking.getFacility());
         dateTextView.setText(booking.getDate());

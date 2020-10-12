@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +26,15 @@ public class Date_facility extends AppCompatActivity {
         if (getbundle != null) {
             booking = getbundle.getParcelable("booking");
         }
+
+        ImageView imageView = findViewById(R.id.back_button);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         CalendarView calendar = findViewById(R.id.calendarView);
         final TextView dateview = findViewById(R.id.dateview);

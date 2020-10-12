@@ -147,9 +147,4 @@ public class DashBoard extends AppCompatActivity {
         slider.setInAnimation(this,android.R.anim.slide_out_right);
     }
 
-
-
-
-
-
 }

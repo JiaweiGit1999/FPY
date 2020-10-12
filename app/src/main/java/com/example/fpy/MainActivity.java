@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                     user.setContact(document.getString("contact"));
 
                                     //send to main activity
-                                    Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+                                    Intent intent = new Intent(getApplicationContext(), live_chats.class);
                                     startActivity(intent);
                                     finish();
                                 } else {

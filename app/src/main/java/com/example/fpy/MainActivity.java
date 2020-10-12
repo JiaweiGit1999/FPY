@@ -61,15 +61,16 @@ public class MainActivity extends AppCompatActivity {
                                     //set global variables
                                     User user= User.getInstance();
                                     user.setUid(currentUser.getUid());
-
                                     user.setUsername(document.getString("name"));
                                     user.setGender(document.getString("gender"));
                                     user.setIc(document.getString("ic"));
                                     user.setEmail(document.getString("email"));
                                     user.setContact(document.getString("contact"));
+                                    user.setImageurl(document.getString("imageurl"));
+
 
                                     //send to main activity
-                                    Intent intent = new Intent(getApplicationContext(), live_chats.class);
+                                    Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                                     startActivity(intent);
                                     finish();
                                 } else {

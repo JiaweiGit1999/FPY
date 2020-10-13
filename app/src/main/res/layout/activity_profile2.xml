@@ -18,10 +18,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/back_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/undo"
             android:layout_marginTop="30dp"
+            android:src="@drawable/undo"
             android:visibility="visible" />
         <TextView
             android:layout_width="match_parent"

@@ -130,20 +130,29 @@ public class DashBoard extends AppCompatActivity {
                                                          }
         );
         //flipper images
-        int images[]={R.drawable.hello,R.drawable.wel};
+        int images[] = {R.drawable.hello, R.drawable.wel};
         slider = findViewById(R.id.slider1);
 
-        for (int image:images)
-        {
+        for (int image : images) {
             flipperimage(image);
 
         }
         //card views on click
+
+        CardView cardView3 = findViewById(R.id.code);
+        cardView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashBoard.this, QrCode.class);
+                startActivity(intent);
+            }
+        });
+
         //facility card
         cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DashBoard.this,Facility.class);
+                Intent intent = new Intent(DashBoard.this, Facility.class);
                 startActivity(intent);
             }
         });
@@ -157,7 +166,7 @@ public class DashBoard extends AppCompatActivity {
         });
 
         //on firestore data changed
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        /*docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -171,7 +180,7 @@ public class DashBoard extends AppCompatActivity {
                     System.out.print("Current data: null");
                 }
             }
-        });
+        });*/
     }
 
     //on options selected

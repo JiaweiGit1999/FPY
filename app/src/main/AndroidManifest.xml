@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CheckoutActivitySarawakPay"></activity>
+        <activity android:name=".QrCode" />
+        <activity android:name=".CheckoutActivitySarawakPay" />
         <activity android:name=".CheckoutActivityOnline" />
         <activity android:name=".CheckoutActivityCredit" />
         <activity android:name=".live_chats" />

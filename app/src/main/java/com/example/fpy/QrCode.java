@@ -3,10 +3,12 @@ package com.example.fpy;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
@@ -15,37 +17,56 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 public class QrCode extends AppCompatActivity {
-    EditText unit;
-    EditText number;
-    EditText ic;
-    EditText name;
+
     ImageView code;
     Button generatecode;
-    String text1, text2, text3, text4;
-
+    String username, ic, contact,expire;
+    List<String> unit;
+    User user = User.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code);
 
-        unit = findViewById(R.id.unit);
-        number = findViewById(R.id.ownernumber);
-        ic = findViewById(R.id.ic);
-        name = findViewById(R.id.visitorname);
         code = findViewById(R.id.qrcode);
         generatecode = findViewById(R.id.generateButton);
         generatecode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                text1 = unit.getText().toString().trim();
-                text2 = number.getText().toString().trim();
-                text3 = ic.getText().toString().trim();
-                text4 = name.getText().toString().trim();
+                //get data from user class
+                username = user.getUsername();
+                ic = user.getIc();
+                contact = user.getContact();
+                unit = user.getUnit();
 
+                //get current time
+                Calendar cal = Calendar.getInstance();
+                //add 2 hours
+                cal.add(Calendar.HOUR_OF_DAY, 2);
+                // convert to string
+                expire = (String) DateFormat.format("hh:mm:ss", cal.getTime());
+
+                Log.d("qrcode:",expire);
+                String units = "";
+                //convert list to string
+                for (String s : unit) {
+                   units = units +","+ s;
+                }
+                //generate qrcode
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 try {
-                    BitMatrix bitMatrix = multiFormatWriter.encode("Unit: " + text1 + "\nOwner Number: " + text2 + "\nVisitor IC: " + text3 + "\nVisitor Name: " + text4, BarcodeFormat.QR_CODE, 200, 200);
+                    BitMatrix bitMatrix = multiFormatWriter.encode("Unit: " + units +
+                            "\nOwner Contact: " + contact +
+                            "\nVisitor IC: " + ic +
+                            "\nVisitor Name: " + username+
+                            "\nexpire time: " + expire,
+                            BarcodeFormat.QR_CODE, 200, 200);
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                     code.setImageBitmap(bitmap);

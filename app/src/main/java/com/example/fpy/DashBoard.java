@@ -167,7 +167,7 @@ public class DashBoard extends AppCompatActivity {
         });
 
         //on firestore data changed
-        /*docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -181,7 +181,7 @@ public class DashBoard extends AppCompatActivity {
                     System.out.print("Current data: null");
                 }
             }
-        });*/
+        });
     }
 
     //on options selected

@@ -65,24 +65,6 @@ public class live_chats extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                for (QueryDocumentSnapshot document : task.getResult()) {
-//
-//                    String name = document.getString("user");
-//                    String msg =  document.getString("message");
-//
-//                    int time = (int) (System.currentTimeMillis());
-//                    Timestamp tsTemp = new Timestamp(time);
-//
-//                    Messages item = new Messages(name, msg, tsTemp);
-//                    messages.add(item);
-//                }
-//
-//            }
-//        });
-
         sendmessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

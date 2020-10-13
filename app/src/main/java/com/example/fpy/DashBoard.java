@@ -2,6 +2,7 @@ package com.example.fpy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -40,6 +41,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
@@ -49,7 +51,6 @@ import javax.annotation.Nullable;
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
-    String username,ic,contact,email,gender;
     private FirebaseAuth mAuth;
     private StorageReference mStorageRef;
     DocumentReference docRef;
@@ -65,9 +66,6 @@ public class DashBoard extends AppCompatActivity {
         final User user = User.getInstance();
 
         //firebase links
-        docRef = db.collection("landlord").document(user.getUid());
-//        Log.d("imageurl: ",user.getImageurl());
-
         mStorageRef = FirebaseStorage.getInstance().getReference();
         //views
 
@@ -98,6 +96,10 @@ public class DashBoard extends AppCompatActivity {
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
                         return true;
+                    case R.id.live_chat:
+                        Intent intent2 = new Intent(DashBoard.this,live_chats.class);
+                        startActivity(intent2);
+                        return true;
                     case R.id.logout:
                         mAuth.signOut();
                         //send to main activity
@@ -122,6 +124,8 @@ public class DashBoard extends AppCompatActivity {
                                                                              .load(mStorageRef.child(user.getImageurl()))
                                                                              .into(userpic);
                                                                  }
+                                                                 TextView username = findViewById(R.id.nav_username);
+                                                                 username.setText(user.getUsername());
                                                              }
                                                          }
         );

@@ -22,4 +22,7 @@
     <item
         android:id="@+id/logout"
         android:title="Logout" />
+    <item
+        android:id="@+id/live_chat"
+        android:title="Live Chat" />
 </menu>

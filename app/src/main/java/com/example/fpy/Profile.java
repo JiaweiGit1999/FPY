@@ -63,6 +63,7 @@ public class Profile extends AppCompatActivity {
         //initialize data
         user = User.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        Log.d("profile: ", user.getUid());
         final DocumentReference docRef = db.collection("landlord").document(user.getUid());
 
         //initialize views

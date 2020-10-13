@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -67,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
                                     user.setEmail(document.getString("email"));
                                     user.setContact(document.getString("contact"));
                                     user.setImageurl(document.getString("imageurl"));
-
+                                    user.setRole(document.getString("role"));
+                                    user.setUnit( (List<String>) document.get("unit"));
 
                                     //send to main activity
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);

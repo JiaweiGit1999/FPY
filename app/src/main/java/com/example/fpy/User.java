@@ -2,6 +2,7 @@ package com.example.fpy;
 
 import android.app.Application;
 
+import java.util.List;
 import java.util.Vector;
 
 public class User extends Application {
@@ -14,6 +15,8 @@ public class User extends Application {
     private String gender;
     private String uid;
     private String imageurl;
+    private String role;
+    private List<String> unit;
     //constructor
     public User() {
     }
@@ -21,6 +24,22 @@ public class User extends Application {
         if (instance == null)
             instance = new User();
         return instance;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setUnit(List<String> unit) {
+        this.unit = unit;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public List<String> getUnit() {
+        return unit;
     }
 
     public void setImageurl(String imageurl) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,47 +10,21 @@
         android:id="@+id/qrcode"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:id="@+id/unit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_below="@id/qrcode"
-        android:hint="Enter Your Unit Number"
-        android:gravity="center" />
-
-    <EditText
-        android:id="@+id/ownernumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/unit"
-        android:hint="Enter Your Phone Number"
-        android:gravity="center" />
-
-    <EditText
-        android:id="@+id/visitorname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter the visitor name"
-        android:layout_below="@id/ownernumber" />
-
-    <EditText
-        android:id="@+id/ic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter the visitor ic number"
-        android:layout_below="@+id/visitorname" />
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/generateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate QR Code"
-        android:layout_below="@id/ic"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:text="Generate QR Code"
 
-        />
-</RelativeLayout>
+        app:layout_constraintLeft_toLeftOf="@id/qrcode"
+        app:layout_constraintRight_toRightOf="@id/qrcode"
+        app:layout_constraintTop_toBottomOf="@id/qrcode" />
+</androidx.constraintlayout.widget.ConstraintLayout>

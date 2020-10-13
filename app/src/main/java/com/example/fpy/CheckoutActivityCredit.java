@@ -139,6 +139,8 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
         builder.setPositiveButton("Ok", null);
         builder.create().show();
+        Intent intent = new Intent(this, Payment_successful.class);
+        startActivity(intent);
     }
 
     //Once payment is start, It will call onActivityResult
@@ -160,6 +162,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         );
 
         paymentIntentClientSecret = responseMap.get("clientSecret");
+
     }
 
     //Ok http call back

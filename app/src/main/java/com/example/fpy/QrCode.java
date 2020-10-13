@@ -45,16 +45,20 @@ public class QrCode extends AppCompatActivity {
                 contact = user.getContact();
                 unit = user.getUnit();
 
+                //get current time
                 Calendar cal = Calendar.getInstance();
+                //add 2 hours
                 cal.add(Calendar.HOUR_OF_DAY, 2);
+                // convert to string
                 expire = (String) DateFormat.format("hh:mm:ss", cal.getTime());
+
                 Log.d("qrcode:",expire);
                 String units = "";
                 //convert list to string
                 for (String s : unit) {
                    units = units +","+ s;
                 }
-
+                //generate qrcode
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 try {
                     BitMatrix bitMatrix = multiFormatWriter.encode("Unit: " + units +

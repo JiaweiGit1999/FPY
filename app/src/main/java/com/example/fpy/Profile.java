@@ -49,11 +49,11 @@ public class Profile extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //user details
-    EditText ename,eemail,ephone,egender;
+    EditText ename, eemail, ephone, egender;
     TextView changephoto;
     User user;
     Button bsave;
-    ImageView profilepic;
+    ImageView profilepic, back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +73,21 @@ public class Profile extends AppCompatActivity {
         bsave = findViewById(R.id.Bsave);
         changephoto = findViewById(R.id.question);
         profilepic = findViewById(R.id.Puser);
+        back = findViewById(R.id.back_button);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         //setup info
         ename.setText(user.getUsername());
         ephone.setText(user.getContact());
         egender.setText(user.getGender());
         eemail.setText(user.getEmail());
-        if(user.getImageurl()!=null){
+        if (user.getImageurl() != null) {
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
                     .into(profilepic);

@@ -67,6 +67,7 @@ public class DashBoard extends AppCompatActivity {
 
         //firebase links
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        docRef = db.collection("landlord").document(user.getUid());
         //views
 
         final TextView textusername = findViewById(R.id.name);

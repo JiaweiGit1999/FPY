@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     //set global variables
                                     User user= User.getInstance();
+
                                     user.setUid(currentUser.getUid());
                                     user.setUsername(document.getString("name"));
                                     user.setGender(document.getString("gender"));
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                     user.setRole(document.getString("role"));
                                     user.setUnit( (List<String>) document.get("unit"));
 
+                                    Log.d("Document: ", user.getUsername());
                                     //send to main activity
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                                     startActivity(intent);

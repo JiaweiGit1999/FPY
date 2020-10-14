@@ -2,6 +2,7 @@ package com.example.fpy;
 
 import android.app.Application;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -96,5 +97,16 @@ public class User extends Application {
 
     public String getGender() {
         return gender;
+    }
+
+    public void reset(){
+        username = "";
+        contact = "";
+        email = "";
+        gender = "";
+        uid = "";
+        imageurl = "";
+        role = "";
+        unit = new ArrayList<>();
     }
 }

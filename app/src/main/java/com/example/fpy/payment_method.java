@@ -72,6 +72,7 @@ public class payment_method extends AppCompatActivity {
                     Toast.makeText(payment_method.this, "Please choose a payment method", Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(payment_method.this, intentclass);
+                    intent.putExtra("amount", total_amount);
                     startActivity(intent);
                 }
             }

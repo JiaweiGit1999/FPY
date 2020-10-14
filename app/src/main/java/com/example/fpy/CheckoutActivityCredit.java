@@ -60,6 +60,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
     private Stripe stripe;
     private TextView mAmount;
     private Button payButton;
+    private double textamount = 0;
 
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
 
@@ -82,6 +83,12 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout_credit);
 
+        Intent dataintent = getIntent();
+
+        if (dataintent != null) {
+            textamount = dataintent.getDoubleExtra("amount", 0);
+        }
+
         mAmount = findViewById(R.id.amountText);
         payButton = findViewById(R.id.payButton);
         payButton.setText("Pay now");
@@ -94,8 +101,8 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
     private void startCheckout() {
         final ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        int amount = 10 * 100;
-        double textamount = amount;
+        int amount = (int) (textamount * 100);
+
         mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", textamount / 100));
         Map<String, String> payMap = new HashMap<>();
         payMap.put("currency", "myr");

@@ -49,7 +49,7 @@ public class live_chats extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_chats);
         //firestore reference
-        final CollectionReference docRef = db.collection("landlord").document(user.getUid()).collection("chatroom");
+        final CollectionReference docRef = db.collection("chatroom").document(user.getUid()).collection("chats");
 
         //variables
         final chatview_adapter adapter = new chatview_adapter(messages);

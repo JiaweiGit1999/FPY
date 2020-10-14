@@ -84,7 +84,8 @@ public class live_chats extends AppCompatActivity {
                     docRef.collection("chatroom").add(update);
 
                     Map<String, Object> dateupdate = new HashMap<>();
-                    dateupdate.put("Date Updated",tsTemp);
+                    dateupdate.put("dateupdated",tsTemp);
+                    dateupdate.put("rmsg",msgview);
 
                     docRef.set(dateupdate, SetOptions.merge());
                 }

@@ -23,11 +23,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 public class login extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
     EditText emailview,passwordview;
     TextView message,forgotpassword;
+    //set global variables
 
 
     @Override
@@ -88,6 +91,7 @@ public class login extends AppCompatActivity {
 
     public void loginsuccess(){
         final FirebaseUser currentUser = mAuth.getCurrentUser();
+        Log.d("Document: ", currentUser.getUid());
         DocumentReference docRef = db.collection("landlord").document(currentUser.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -95,19 +99,21 @@ public class login extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        Log.d("Document: ", currentUser.getUid());
-
-                        //set global variables
                         User user= User.getInstance();
-                        user.setUid(currentUser.getUid());
 
+
+                        user.reset();
+
+                        user.setUid(currentUser.getUid());
                         user.setUsername(document.getString("name"));
                         user.setGender(document.getString("gender"));
                         user.setIc(document.getString("ic"));
                         user.setEmail(document.getString("email"));
                         user.setContact(document.getString("contact"));
                         user.setImageurl(document.getString("imageurl"));
-
+                        user.setRole(document.getString("role"));
+                        user.setUnit( (List<String>) document.get("unit"));
+                        Log.d("Document:",user.getUsername());
                         //send to main activity
                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                         startActivity(intent);

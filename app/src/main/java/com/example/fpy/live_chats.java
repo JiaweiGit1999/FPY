@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -49,7 +50,7 @@ public class live_chats extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_chats);
         //firestore reference
-        final CollectionReference docRef = db.collection("chatroom").document(user.getUid()).collection("chats");
+        final DocumentReference docRef = db.collection("landlord").document(user.getUid());
 
         //variables
         final chatview_adapter adapter = new chatview_adapter(messages);
@@ -77,13 +78,20 @@ public class live_chats extends AppCompatActivity {
                     update.put("message", msgview);
                     update.put("user", "user");
                     update.put("time",tsTemp);
+                    update.put("name", user.getUsername());
+                    update.put("imageurl",user.getImageurl());
 
-                    docRef.add(update);
+                    docRef.collection("chatroom").add(update);
+
+                    Map<String, Object> dateupdate = new HashMap<>();
+                    dateupdate.put("Date Updated",tsTemp);
+
+                    docRef.set(dateupdate, SetOptions.merge());
                 }
             }
         });
 
-        docRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        docRef.collection("chatroom").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {

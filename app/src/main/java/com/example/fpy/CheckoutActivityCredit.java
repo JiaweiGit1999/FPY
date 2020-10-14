@@ -1,6 +1,9 @@
 package com.example.fpy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +39,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -45,109 +55,106 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CheckoutActivityCredit extends AppCompatActivity {
-    // 10.0.2.2 is the Android emulator's alias to localhost
-    //  private static final String BACKEND_URL = "https://my-stripe-app-backend.herokuapp.com/"; after ddeployed to server
-    private static final String BACKEND_URL = "http://10.0.2.2:4242/";
 
-    private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
     private TextView mAmount;
-    Button payButton;
+    private Button payButton;
+
+    private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+
+    private Task<String> creditPayment(String json) {
+        return mFunctions
+                .getHttpsCallable("Credit/payment")
+                .call(json)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        String result = (String) task.getResult().getData();
+                        Log.v("result", result);
+                        return result;
+                    }
+                });
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout_credit);
+
         mAmount = findViewById(R.id.amountText);
         payButton = findViewById(R.id.payButton);
         payButton.setText("Pay now");
-        // Configure the SDK with your Stripe publishable key so it can make requests to Stripe
         stripe = new Stripe(
                 getApplicationContext(),
                 Objects.requireNonNull("pk_test_51HYjjzF4IJ8BHvcZASjHh7DzctvdHJn2u9kQma9CnPvTbLPoqKm2LeonLfIaoZ7crChlTVsqtADSXslC60JkH9i100nXYkuYni") //Your publishable key
         );
-        //call check out
         startCheckout();
     }
 
     private void startCheckout() {
-        //amount will calculate from .00 make sure multiply by 100
-        double amount = 10.00 * 100;
-        mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", amount / 100));
-        Map<String, Object> payMap = new HashMap<>();
-        Map<String, Object> itemMap = new HashMap<>();
-        List<Map<String, Object>> itemList = new ArrayList<>();
+        final ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        int amount = 10 * 100;
+        double textamount = amount;
+        mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", textamount / 100));
+        Map<String, String> payMap = new HashMap<>();
         payMap.put("currency", "myr");
-        itemMap.put("id", "photo_subscription");
-        itemMap.put("amount", amount);
-        itemList.add(itemMap);
-        payMap.put("items", itemList);
-        String json = new Gson().toJson(payMap);
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            String jsonstring = objectMapper.writeValueAsString(payMap);
-            Toast.makeText(this, jsonstring, Toast.LENGTH_LONG).show();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-
+        payMap.put("amount", String.valueOf(amount));
+        final String json = new Gson().toJson(payMap);
         Log.i("TAG", "startCheckout: " + json);
-
-        // Create a PaymentIntent by calling the server's endpoint.
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
-        /*String json = "{"
-                + "\"currency\":\"usd\","
-                + "\"items\":["
-                + "{\"id\":\"photo_subscription\",\"amount\":"+amount+"}"
-                + "]"
-                + "}";*/
-        RequestBody body = RequestBody.create(json, mediaType);
-        Request request = new Request.Builder()
-                .url(BACKEND_URL + "create-payment-intent")
-                .post(body)
-                .build();
-        //Connect with stripe and get paymentIntentClientSecret
-        httpClient.newCall(request)
-                .enqueue(new PayCallback(this));
-
-        // Hook up the pay button to the card widget and stripe instance
 
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CardInputWidget cardInputWidget = CheckoutActivityCredit.this.findViewById(R.id.cardInputWidget);
-                PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
-                if (params != null) {
-                    ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
-                            .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
-                    stripe.confirmPayment(CheckoutActivityCredit.this, confirmParams);
-                }
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                if (connected) {
+                    creditPayment(json)
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Exception e = task.getException();
+                                        Log.v("error", e.getMessage());
+                                        if (e instanceof FirebaseFunctionsException) {
+                                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                            FirebaseFunctionsException.Code code = ffe.getCode();
+                                            Object details = ffe.getDetails();
+                                        }
+                                    } else {
+                                        paymentIntentClientSecret = task.getResult();
+                                        Log.v("details", task.getResult());
+                                        CardInputWidget cardInputWidget = CheckoutActivityCredit.this.findViewById(R.id.cardInputWidget);
+                                        PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
+                                        if (params != null) {
+                                            ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
+                                            stripe.confirmPayment(CheckoutActivityCredit.this, confirmParams);
+                                        } else
+                                            Toast.makeText(CheckoutActivityCredit.this, "Please enter your credit/debit card information", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                } else
+                    Toast.makeText(CheckoutActivityCredit.this, "No internet connection", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void displayAlert(@NonNull String title,
                               @Nullable String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message);
-
-        builder.setPositiveButton("Ok", null);
-        builder.create().show();
-        Intent intent = new Intent(this, Payment_successful.class);
-        startActivity(intent);
+        if (message != null)
+            Log.v("Result", message);
+        if (title.equals("Payment completed")) {
+            Intent intent = new Intent(CheckoutActivityCredit.this, Payment_successful.class);
+            startActivity(intent);
+        } else
+            Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show();
     }
 
     //Once payment is start, It will call onActivityResult
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Handle the result of stripe.confirmPayment
         stripe.onPaymentResult(requestCode, data, new PaymentResultCallback(this));
     }
@@ -160,61 +167,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
                 Objects.requireNonNull(response.body()).string(),
                 type
         );
-
         paymentIntentClientSecret = responseMap.get("clientSecret");
-
-    }
-
-    //Ok http call back
-    private static final class PayCallback implements Callback {
-        @NonNull
-        private final WeakReference<CheckoutActivityCredit> activityRef;
-
-        PayCallback(@NonNull CheckoutActivityCredit activity) {
-            activityRef = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void onFailure(@NonNull Call call, @NonNull final IOException e) {
-            final CheckoutActivityCredit activity = activityRef.get();
-            Log.e("TAG", "onFailure: " + e.getMessage());
-            if (activity == null) {
-                return;
-            }
-
-            activity.runOnUiThread(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           Toast.makeText(
-                                                   activity, "Error: " + e.toString(), Toast.LENGTH_LONG
-                                           ).show();
-                                       }
-                                   }
-            );
-        }
-
-        @Override
-        public void onResponse(@NonNull Call call, @NonNull final Response response)
-                throws IOException {
-            final CheckoutActivityCredit activity = activityRef.get();
-            if (activity == null) {
-                return;
-            }
-
-            if (!response.isSuccessful()) {
-                activity.runOnUiThread(new Runnable() {
-                                           @Override
-                                           public void run() {
-                                               Toast.makeText(
-                                                       activity, "Error: " + response.toString(), Toast.LENGTH_LONG
-                                               ).show();
-                                           }
-                                       }
-                );
-            } else {
-                activity.onPaymentSuccess(response);
-            }
-        }
     }
 
     private static final class PaymentResultCallback
@@ -259,7 +212,6 @@ public class CheckoutActivityCredit extends AppCompatActivity {
             if (activity == null) {
                 return;
             }
-
             // Payment request failed – allow retrying using the same payment method
             activity.displayAlert("Error", e.toString());
         }

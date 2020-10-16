@@ -67,7 +67,6 @@ public class DashBoard extends AppCompatActivity {
 
         //firebase links
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        Log.d("Document",user.getUsername());
         docRef = db.collection("landlord").document(user.getUid());
         //views
 
@@ -122,6 +121,7 @@ public class DashBoard extends AppCompatActivity {
                                                                  if(user.getImageurl()!=null){
                                                                      //update profile pic
                                                                      ImageView userpic = findViewById(R.id.userpic);
+                                                                     Log.d("profile ",user.getImageurl());
                                                                      GlideApp.with(DashBoard.this /* context */)
                                                                              .load(mStorageRef.child(user.getImageurl()))
                                                                              .into(userpic);

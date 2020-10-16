@@ -42,6 +42,7 @@ public class Profile extends AppCompatActivity {
     //track image request
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri mImageUri;
+    private boolean newimage_status = false;
     private StorageReference mStorageRef;
     private StorageTask mUploadTask;
 
@@ -121,11 +122,11 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 //Data to be updated in firestore
                 Map<String, Object> update = new HashMap<>();
-                if(mUploadTask != null && mUploadTask.isInProgress()){
-                    Log.d("image update status: ","no image selected");
-                }else{
+                if(newimage_status){
                     uploadFile();
                     update.put("imageurl", user.getUid()+"." + getFileExtension(mImageUri));
+                }else{
+                    Log.d("image update status: ","no image selected");
                 }
 
                 update.put("name", ename.getText().toString());
@@ -160,7 +161,9 @@ public class Profile extends AppCompatActivity {
                 && data != null && data.getData() != null) {
             mImageUri = data.getData();
             Picasso.get().load(mImageUri).into(profilepic);
+            newimage_status = true;
         }
+
     }
 
     private String getFileExtension(Uri uri) {

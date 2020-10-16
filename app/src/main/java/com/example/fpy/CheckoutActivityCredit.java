@@ -66,7 +66,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
     private Task<String> creditPayment(String json) {
         return mFunctions
-                .getHttpsCallable("Credit/payment")
+                .getHttpsCallable("Credit")
                 .call(json)
                 .continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override

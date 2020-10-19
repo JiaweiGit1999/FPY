@@ -20,9 +20,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.core.OrderBy;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class live_chats extends AppCompatActivity {
         //set the adapter to recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
+//        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -92,7 +94,9 @@ public class live_chats extends AppCompatActivity {
             }
         });
 
-        docRef.collection("chatroom").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        docRef.collection("chatroom")
+                .orderBy("time", Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {

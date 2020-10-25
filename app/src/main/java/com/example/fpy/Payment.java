@@ -29,7 +29,7 @@ public class Payment extends AppCompatActivity {
 
         final double total_amount = 100;
 
-        amount.setText(String.format(Locale.ENGLISH, "%.2f", total_amount));
+        amount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", total_amount));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
 

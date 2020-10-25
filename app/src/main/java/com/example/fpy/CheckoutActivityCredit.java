@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
@@ -35,10 +37,14 @@ import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -56,12 +62,13 @@ import okhttp3.Response;
 
 public class CheckoutActivityCredit extends AppCompatActivity {
 
-    private String paymentIntentClientSecret;
+    private static String paymentIntentClientSecret;
     private Stripe stripe;
     private TextView mAmount;
     private Button payButton;
     private double textamount = 0;
-
+    private static int amount;
+    private static PaymentIntent paymentIntent;
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
 
     private Task<String> creditPayment(String json) {
@@ -101,9 +108,8 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
     private void startCheckout() {
         final ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        int amount = (int) (textamount * 100);
-
-        mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", textamount / 100));
+        amount = (int) (textamount * 100);
+        mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", textamount));
         Map<String, String> payMap = new HashMap<>();
         payMap.put("currency", "myr");
         payMap.put("amount", String.valueOf(amount));
@@ -154,8 +160,9 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         if (title.equals("Payment completed")) {
             Intent intent = new Intent(CheckoutActivityCredit.this, Payment_successful.class);
             startActivity(intent);
-        } else
+        } else {
             Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show();
+        }
     }
 
     //Once payment is start, It will call onActivityResult
@@ -164,17 +171,6 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // Handle the result of stripe.confirmPayment
         stripe.onPaymentResult(requestCode, data, new PaymentResultCallback(this));
-    }
-
-    private void onPaymentSuccess(@NonNull final Response response) throws IOException {
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
-        Map<String, String> responseMap = gson.fromJson(
-                Objects.requireNonNull(response.body()).string(),
-                type
-        );
-        paymentIntentClientSecret = responseMap.get("clientSecret");
     }
 
     private static final class PaymentResultCallback
@@ -191,25 +187,29 @@ public class CheckoutActivityCredit extends AppCompatActivity {
             final CheckoutActivityCredit activity = activityRef.get();
             if (activity == null) {
                 return;
-            }
-
-            PaymentIntent paymentIntent = result.getIntent();
-            PaymentIntent.Status status = paymentIntent.getStatus();
-            if (status == PaymentIntent.Status.Succeeded) {
-                // Payment completed successfully
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                //If It is successful You will get detail in log and UI
-                Log.i("TAG", "onSuccess:Payment " + gson.toJson(paymentIntent));
-                activity.displayAlert(
-                        "Payment completed",
-                        gson.toJson(paymentIntent)
-                );
-            } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
-                // Payment failed – allow retrying using a different payment method
-                activity.displayAlert(
-                        "Payment failed",
-                        Objects.requireNonNull(paymentIntent.getLastPaymentError()).getMessage()
-                );
+            } else {
+                paymentIntent = result.getIntent();
+                PaymentIntent.Status status = paymentIntent.getStatus();
+                if (status == PaymentIntent.Status.Succeeded) {
+                    // Payment completed successfully
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    //If It is successful You will get detail in log and UI
+                    Log.i("TAG", "onSuccess:Payment " + gson.toJson(paymentIntent));
+                    savepayment();
+                    activity.displayAlert(
+                            "Payment completed",
+                            gson.toJson(paymentIntent)
+                    );
+                } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
+                    // Payment failed – allow retrying using a different payment method
+                    savepayment();
+                    activity.displayAlert(
+                            "Payment failed",
+                            Objects.requireNonNull(paymentIntent.getLastPaymentError()).getMessage()
+                    );
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    Log.i("TAG", "onError:Payment " + gson.toJson(paymentIntent));
+                }
             }
         }
 
@@ -220,7 +220,34 @@ public class CheckoutActivityCredit extends AppCompatActivity {
                 return;
             }
             // Payment request failed – allow retrying using the same payment method
-            activity.displayAlert("Error", e.toString());
+            else {
+                savepayment();
+                activity.displayAlert("Error", e.toString());
+                Log.i("TAG", "onError:Payment " + e.toString());
+            }
         }
+    }
+
+    private static void savepayment() {
+        Map<String, Object> paymentdata = new HashMap<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference ref;
+        try {
+            ref = db.collection("payment").document(paymentIntent.getId());
+            paymentdata.put("payment_id", paymentIntent.getId());
+        } catch (Exception e) {
+            ref = db.collection("payment").document(paymentIntentClientSecret);
+            paymentdata.put("payment_id", paymentIntentClientSecret);
+        }
+        paymentdata.put("payer", User.getInstance().getUid());
+        if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded)
+            paymentdata.put("status", "Successful");
+        else
+            paymentdata.put("status", "Failed");
+        paymentdata.put("amount", amount);
+        paymentdata.put("time", new Date().getTime());
+        paymentdata.put("payment_method", "Card");
+        paymentdata.put("bank", null);
+        ref.set(paymentdata);
     }
 }

@@ -20,9 +20,12 @@
             android:id="@+id/back_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/undo"
-            android:visibility="visible" />
+            android:src="@drawable/down_arrow"
+            android:rotation="90"
+            android:layout_marginTop="32dp"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="30dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -112,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="35dp"
-            android:text="ONLINE TRANSFER" />
+            android:text="Online Transfer" />
 
         <RadioButton
             android:id="@+id/creditcard"

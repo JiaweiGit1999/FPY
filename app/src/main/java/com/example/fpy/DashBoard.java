@@ -3,6 +3,7 @@ package com.example.fpy;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -49,6 +50,7 @@ import java.io.InputStream;
 
 import javax.annotation.Nullable;
 
+
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
     private FirebaseAuth mAuth;
@@ -77,6 +79,7 @@ public class DashBoard extends AppCompatActivity {
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
         NavigationView navigationView=findViewById(R.id.navview);
+        navigationView.setBackgroundResource(R.color.menuBackground);
 
         //on navigator options selected
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -101,20 +104,24 @@ public class DashBoard extends AppCompatActivity {
                         Intent intent2 = new Intent(DashBoard.this,live_chats.class);
                         startActivity(intent2);
                         return true;
-                    case R.id.logout:
-                        mAuth.signOut();
-                        //send to main activity
-                        Intent logoutintent = new Intent(DashBoard.this, login.class);
-                        startActivity(logoutintent);
-                        return true;
-
-                }
+                 }
                 return false;
             }
         });
 
+        //logout (TextView)
+        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                //send to main activity
+                Intent logoutintent = new Intent(DashBoard.this, login.class);
+                startActivity(logoutintent);
+            }
+        });
+
         //on nav view clicked
-        findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.profileIcon).setOnClickListener(new View.OnClickListener() {
                                                              @Override
                                                              public void onClick(View view) {
                                                                  drawerLayout.openDrawer(GravityCompat.END);
@@ -131,8 +138,10 @@ public class DashBoard extends AppCompatActivity {
                                                              }
                                                          }
         );
+
+
         //flipper images
-        int images[] = {R.drawable.hello, R.drawable.wel};
+        int images[] = {R.drawable.ann1, R.drawable.ann2};
         slider = findViewById(R.id.slider1);
 
         for (int image : images) {
@@ -210,7 +219,4 @@ public class DashBoard extends AppCompatActivity {
         slider.setAutoStart(true);
         slider.setInAnimation(this,android.R.anim.slide_in_left);
         slider.setInAnimation(this,android.R.anim.slide_out_right);
-    }
-
-
-}
+    }}

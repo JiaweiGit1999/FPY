@@ -9,8 +9,7 @@
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -48,25 +47,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24dp"
+            android:fontFamily="@font/roboto"
+            android:textStyle="bold"
             android:textColor="#5F6392"
             android:gravity="center"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:text="Booking Details" />
 
         <RelativeLayout
             android:layout_width="315dp"
             android:layout_height="400dp"
             android:layout_marginLeft="47dp"
-            android:layout_marginTop="50dp"
-            android:background="#C8E0FF"
-            android:layout_centerVertical="true"
-            >
+            android:layout_marginTop="20dp"
+            android:background="@drawable/radius"
+            android:layout_centerVertical="true">
 
             <TextView
                 android:id="@+id/Ffacility"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="#5F6392"
                 android:layout_marginTop="50dp"
                 android:layout_marginLeft="20dp"
@@ -78,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                android:fontFamily="@font/roboto"
                 android:textColor="#5F6392"
                 android:layout_marginTop="7dp"
                 android:layout_marginLeft="20dp"
@@ -92,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:text="Date"
                 android:textColor="#5F6392"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_marginTop="14dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="19dp"
@@ -104,6 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                android:fontFamily="@font/roboto"
                 android:layout_marginTop="7dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="19dp"
@@ -112,7 +114,7 @@
 
             <TextView
                 android:id="@+id/FTime"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Time"
@@ -128,6 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                android:fontFamily="@font/roboto"
                 android:layout_marginTop="7dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="19dp"
@@ -138,11 +141,11 @@
                 android:id="@+id/Fduration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Duration"
                 android:layout_marginTop="14dp"
                 android:layout_marginLeft="20dp"
-                android:textSize="19dp"
+                android:textSize="20sp"
                 android:textColor="#5F6392"
                 android:layout_below="@+id/TtextView"/>
 
@@ -154,6 +157,7 @@
                 android:layout_marginTop="7dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="19dp"
+                android:fontFamily="@font/roboto"
                 android:text="TextView" />
         </RelativeLayout>
 
@@ -164,9 +168,10 @@
             android:layout_gravity="center"
             android:text="Confirm"
             android:layout_marginTop="30dp"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
             android:background="@drawable/login_button"
             />
-
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

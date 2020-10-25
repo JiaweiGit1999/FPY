@@ -160,8 +160,10 @@ public class CheckoutActivityOnline extends AppCompatActivity {
         if (title.equals("Payment completed")) {
             Intent intent = new Intent(CheckoutActivityOnline.this, Payment_successful.class);
             startActivity(intent);
-        } else
+        } else {
             Toast.makeText(this, "Payment failed", Toast.LENGTH_LONG).show();
+            onBackPressed();
+        }
     }
 
     //Once payment is start, It will call onActivityResult

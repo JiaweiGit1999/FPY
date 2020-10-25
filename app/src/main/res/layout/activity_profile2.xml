@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C8E0FF"
+    android:background="@drawable/gradient_background_1"
     tools:context=".Profile">
 
     <!-- TODO: Update blank fragment layout -->
@@ -19,7 +19,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Roboto">
 
         <ImageView
             android:id="@+id/back_button"
@@ -43,11 +44,11 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/Puser"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:scaleType="centerCrop"
         android:src="@drawable/wel"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="90dp"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +63,6 @@
         android:layout_marginTop="10dp"
         android:textSize="16dp"
         android:textColor="#006FFF"
-        android:textStyle="bold"
         android:layout_centerHorizontal="true"
         />
 
@@ -71,14 +71,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/question"
-        android:layout_marginTop="40dp"
         android:layout_marginLeft="30dp"
-        android:textSize="16dp"
-        android:textColor="#006FFF"
-        android:textStyle="bold"
+        android:fontFamily="@font/roboto_medium"
         android:text="Name"
-
-        />
+        android:textColor="#5F6392"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/Ename"
@@ -86,93 +83,102 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Pname"
         android:layout_marginLeft="25dp"
-        android:ems="10" />
+        android:layout_marginBottom="10dp"
+        android:ems="17"
+        android:textSize="18sp"/>
+
     <TextView
         android:id="@+id/Pemail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/Ename"
         android:layout_marginLeft="30dp"
+        android:fontFamily="@font/roboto_medium"
         android:text="Email"
-        android:textSize="16dp"
-        android:textColor="#006FFF"
-        android:textStyle="bold"
+        android:textColor="#5F6392"
+        android:textSize="18sp"/>
 
-        />
     <EditText
         android:id="@+id/Eemail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginLeft="25dp"
         android:layout_below="@id/Pemail"
-        />
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="10dp"
+        android:ems="17"
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/Pphone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phone Number"
-        android:layout_marginLeft="30dp"
-        android:textSize="16dp"
-        android:textColor="#006FFF"
-        android:textStyle="bold"
         android:layout_below="@id/Eemail"
+        android:layout_marginLeft="30dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Phone Number"
+        android:textColor="#5F6392"
+        android:textSize="18sp" />
 
-        />
     <EditText
         android:id="@+id/Ephone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_below="@id/Pphone"
         android:layout_marginLeft="25dp"
-        />
+        android:layout_marginBottom="10dp"
+        android:ems="17"
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/Pgender"
-        android:layout_marginLeft="30dp"
-        android:layout_below="@id/Ephone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/Ephone"
+        android:layout_marginLeft="30dp"
+        android:fontFamily="@font/roboto_medium"
         android:text="Gender"
-        android:textSize="16dp"
-        android:textColor="#006FFF"
-        android:textStyle="bold"
-        />
+        android:textColor="#5F6392"
+        android:textSize="18sp"/>
+
     <EditText
         android:id="@+id/Egender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginLeft="25dp"
         android:layout_below="@id/Pgender"
-        />
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="10dp"
+        android:ems="17"
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/Punit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unit Number"
-        android:layout_marginLeft="30dp"
         android:layout_below="@id/Egender"
-        android:textSize="16dp"
-        android:textColor="#006FFF"
-        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Unit Number"
+        android:textColor="#5F6392"
+        android:textSize="18sp" />
 
-        />
     <EditText
         android:id="@+id/Eunit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:ems="17"
+        android:textSize="18sp"
         android:layout_marginLeft="25dp"
-        android:layout_below="@id/Punit"
-        />
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/Punit"/>
 
     <Button
         android:id="@+id/Bsave"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="370dp"
+        android:layout_height="50dp"
         android:text="Save"
-        android:layout_marginTop="20dp"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
         android:background="@drawable/login_button"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/Eunit"

@@ -239,7 +239,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
             ref = db.collection("payment").document(paymentIntentClientSecret);
             paymentdata.put("payment_id", paymentIntentClientSecret);
         }
-        paymentdata.put("payer", User.getInstance().getUid());
+        paymentdata.put("user_id", User.getInstance().getUid());
         if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded)
             paymentdata.put("status", "Successful");
         else

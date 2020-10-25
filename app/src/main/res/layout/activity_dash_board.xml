@@ -49,14 +49,16 @@
                 android:textColor="#CCA679"
                 android:textSize="100px" />
 
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imageView3"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:scaleType="centerCrop"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="40dp"
                 android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/usericon" />
+                app:srcCompat="@drawable/usericon"
+                app:riv_oval="true" />
         </RelativeLayout>
             <ViewFlipper
                 android:id="@+id/slider1"

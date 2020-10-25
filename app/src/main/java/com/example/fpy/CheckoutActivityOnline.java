@@ -251,7 +251,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
             ref = db.collection("payment").document(paymentIntentClientSecret);
             paymentdata.put("payment_id", paymentIntentClientSecret);
         }
-        paymentdata.put("payer", User.getInstance().getUid());
+        paymentdata.put("user_id", User.getInstance().getUid());
         try {
             if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded)
                 paymentdata.put("status", "Successful");

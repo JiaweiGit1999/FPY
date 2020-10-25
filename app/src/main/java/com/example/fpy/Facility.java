@@ -63,7 +63,7 @@ public class Facility extends AppCompatActivity {
         cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent("AV Room-+");
+                intent("AV Room");
             }
         });
     }

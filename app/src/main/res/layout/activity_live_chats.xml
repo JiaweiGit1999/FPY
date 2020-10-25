@@ -9,10 +9,38 @@
     android:focusableInTouchMode="true"
     tools:context=".LiveChat">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp"
+            android:rotation="90"
+            android:src="@drawable/down_arrow"
+            android:visibility="visible" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_marginRight="50dp"
+            android:text="Facilities"
+            android:textColor="#383A4F"
+            android:textSize="25dp" />
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatview"
         android:layout_width="match_parent"
-        android:layout_height="690dp"
+        android:layout_height="700dp"
         android:backgroundTint="#66F1FD" />
 
     <LinearLayout

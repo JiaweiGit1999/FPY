@@ -24,8 +24,9 @@
                 android:id="@+id/back_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/undo"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="32dp"
+                android:rotation="90"
+                android:src="@drawable/down_arrow"
                 android:visibility="visible" />
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +37,6 @@
                 android:text="Facilities"
                 android:textColor="#383A4F"
                 android:textSize="25dp" />
-
         </androidx.appcompat.widget.Toolbar>
 
 

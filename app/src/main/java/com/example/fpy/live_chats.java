@@ -18,11 +18,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.core.OrderBy;
 
@@ -74,8 +76,8 @@ public class live_chats extends AppCompatActivity {
                 String msgview = msgtext.getText().toString();
                 if(!msgview.isEmpty()){
                     int time = (int) (System.currentTimeMillis());
-                    Timestamp tsTemp = new Timestamp(time);
 
+                    com.google.firebase.Timestamp tsTemp = com.google.firebase.Timestamp.now();
                     Map<String, Object> update = new HashMap<>();
                     update.put("message", msgview);
                     update.put("user", "user");
@@ -86,7 +88,7 @@ public class live_chats extends AppCompatActivity {
                     docRef.collection("chatroom").add(update);
 
                     Map<String, Object> dateupdate = new HashMap<>();
-                    dateupdate.put("dateupdated",tsTemp);
+                    dateupdate.put("dateupdated", tsTemp);
                     dateupdate.put("rmsg",msgview);
 
                     docRef.set(dateupdate, SetOptions.merge());

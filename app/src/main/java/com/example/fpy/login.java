@@ -1,6 +1,7 @@
 package com.example.fpy;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,12 +48,24 @@ public class login extends AppCompatActivity {
 
         forgotpassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                ResetPassword ResetPasswordfragment = new ResetPassword();
-                fragmentTransaction.add(R.id.PasswordResetLayout, ResetPasswordfragment);
-                fragmentTransaction.commit();
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
+                View popup = getLayoutInflater().inflate(R.layout.forgot_password,null);
+                final EditText email=popup.findViewById(R.id.email);
+                Button save =popup.findViewById(R.id.save);
+                builder.setView(popup);
+
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(true);
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("Test: ",email.getText().toString());
+                    }
+                });
+                alertDialog.show();
+
+
             }
         });
 
@@ -103,7 +116,7 @@ public class login extends AppCompatActivity {
 
 
                         user.reset();
-
+                        //set data of user class
                         user.setUid(currentUser.getUid());
                         user.setUsername(document.getString("name"));
                         user.setGender(document.getString("gender"));
@@ -114,6 +127,7 @@ public class login extends AppCompatActivity {
                         user.setRole(document.getString("role"));
                         user.setUnit( (List<String>) document.get("unit"));
                         Log.d("Document:",user.getUsername());
+
                         //send to main activity
                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                         startActivity(intent);

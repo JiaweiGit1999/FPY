@@ -38,6 +38,7 @@ public class success_booking extends AppCompatActivity {
         bookingdetails.put("date", booking.getDate());
         bookingdetails.put("time", booking.getTime());
         bookingdetails.put("duration", booking.getDuration());
+        bookingdetails.put("status", "pending");
 
         DocumentReference ref = db.collection("booking").document();
         //String myId = ref.getId();

@@ -34,7 +34,7 @@ public class payment_method extends AppCompatActivity {
         if (dataintent != null) {
             total_amount = dataintent.getDoubleExtra("amount", 0);
             details = dataintent.getStringExtra("detail");
-            amount.setText(String.format(Locale.ENGLISH, "%.2f", total_amount));
+            amount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", total_amount));
             detail.setText(details);
         }
 

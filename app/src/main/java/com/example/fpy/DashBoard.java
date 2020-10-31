@@ -1,36 +1,26 @@
 package com.example.fpy;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -38,15 +28,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
-
-import org.w3c.dom.Text;
-
-import java.io.InputStream;
 
 import javax.annotation.Nullable;
 
@@ -75,6 +58,11 @@ public class DashBoard extends AppCompatActivity {
         final TextView textusername = findViewById(R.id.name);
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
+        ImageView imageView = findViewById(R.id.imageView3);
+        if (user.getImageurl() != null)
+            GlideApp.with(this /* context */)
+                    .load(mStorageRef.child(user.getImageurl()))
+                    .into(imageView);
 
         ImageView imageView = findViewById(R.id.profileIcon);
         if (user.getImageurl() != null)
@@ -84,6 +72,7 @@ public class DashBoard extends AppCompatActivity {
 
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
+      
         NavigationView navigationView=findViewById(R.id.navview);
         navigationView.setBackgroundResource(R.color.menuBackground);
 
@@ -105,6 +94,7 @@ public class DashBoard extends AppCompatActivity {
                         return true;
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
+                        PasswordDialog();
                         return true;
                  }
                 return false;
@@ -230,4 +220,38 @@ public class DashBoard extends AppCompatActivity {
         slider.setAutoStart(true);
         slider.setInAnimation(this,android.R.anim.slide_in_left);
         slider.setInAnimation(this,android.R.anim.slide_out_right);
-    }}
+    }
+
+    //Alert Dialog
+    public void PasswordDialog()
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoard.this);
+        View popup = getLayoutInflater().inflate(R.layout.change_password,null);
+        final EditText current_password=popup.findViewById(R.id.current_password);
+        final EditText new_password=popup.findViewById(R.id.new_password);
+        final EditText confirm_password=popup.findViewById(R.id.confirm_password);
+        Button save= popup.findViewById(R.id.confirm);
+        Button cancel=popup.findViewById(R.id.cancel);
+        builder.setView(popup);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Test CURRENT PASS: ",current_password.getText().toString());
+                Log.d("Test NEW PASS: ",new_password.getText().toString());
+                Log.d("Test: CONFIRM PASS",confirm_password.getText().toString());
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+}

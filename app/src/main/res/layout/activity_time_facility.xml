@@ -5,10 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Time_facility">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        android:theme="@style/Nunito">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -17,65 +20,67 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/Roboto">
 
             <ImageView
                 android:id="@+id/back_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/undo"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="32dp"
+                android:rotation="90"
+                android:src="@drawable/down_arrow"
                 android:visibility="visible" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:gravity="center"
                 android:layout_marginRight="50dp"
+                android:gravity="center"
                 android:text="Facilities"
                 android:textColor="#383A4F"
                 android:textSize="25dp" />
-
         </androidx.appcompat.widget.Toolbar>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:textColor="#5F6392"
-            android:gravity="center"
             android:layout_marginTop="50dp"
-            android:text="Select Time and Duration" />
+            android:gravity="center"
+            android:text="Select Time and Duration"
+            android:textColor="#5F6392"
+            android:textSize="30dp"/>
 
         <TimePicker
             android:id="@+id/time_picker"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:timePickerMode="spinner"
-            android:layout_marginTop="30dp"
-            android:background="#C8E0FF"
             android:layout_gravity="center"
-
-            />
+            android:layout_marginTop="30dp"
+            android:background="@drawable/durationbg"
+            android:timePickerMode="spinner" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="300dp"
-            android:minHeight="40dp"
-            android:background="#C8E0FF"
-            android:layout_marginTop="40dp"
+            android:layout_height="55dp"
             android:layout_gravity="center"
-
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="40dp"
+            android:background="@drawable/durationbg"
+            android:textAlignment="center"/>
 
         <Button
             android:id="@+id/confirm_button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Confirm"
             android:layout_marginTop="30dp"
             android:background="@drawable/login_button"
-            />
+            android:text="Confirm"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
     </LinearLayout>
     

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".payment_method">
+    tools:context=".payment_method"
+    android:theme="@style/Nunito"
+    android:background="@drawable/gradient_background_1">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,15 +16,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Roboto">
 
         <ImageView
             android:id="@+id/back_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/undo"
-            android:visibility="visible" />
+            android:src="@drawable/down_arrow"
+            android:rotation="90"
+            android:layout_marginTop="32dp"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="30dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,119 +38,143 @@
             android:gravity="center"
             android:text="Payment"
             android:textColor="#383A4F"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/Tamount"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/nunito_semibold"
         android:text="Total Amount"
         android:textColor="#5F6392"
-        android:textSize="20dp"
+        android:textSize="25sp"
         android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
         android:id="@+id/Eamount"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="12dp"
         android:text="TextView"
         android:textColor="#CCA679"
         android:textSize="22dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Tamount" />
 
     <TextView
         android:id="@+id/Tpayment"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="25dp"
-        android:text="Payment Detail"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:text="Payment Details"
         android:textColor="#5F6392"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/Eamount"
-
-        />
+        android:textSize="25sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Eamount" />
 
     <TextView
         android:id="@+id/Epayment"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="12dp"
         android:text="TextView"
         android:textColor="#CCA679"
-        android:textSize="22dp"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Tpayment" />
 
     <TextView
         android:id="@+id/Tmethod"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/nunito_semibold"
         android:text="Choose Payment Method"
         android:textColor="#5F6392"
-        android:textSize="20dp"
-        android:textStyle="bold"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Epayment" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Tmethod"
-        android:textSize="20dp"
-        android:textStyle="bold"
-
-        >
+        android:layout_marginTop="25dp">
 
         <RadioButton
             android:id="@+id/Online"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="35dp"
-            android:text="ONLINE TRANSFER" />
+            android:layout_width="358dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:buttonTint="#CCA679"
+            android:drawableRight="@drawable/online"
+            android:drawablePadding="15dp"
+            android:paddingLeft="65dp"
+            android:paddingTop="10dp"
+            android:paddingRight="60dp"
+            android:paddingBottom="10dp"
+            android:text="Online Transfer"
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/creditcard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="35dp"
+            android:layout_width="358dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:buttonTint="#CCA679"
+            android:drawablePadding="15dp"
+            android:paddingLeft="75dp"
+            android:paddingTop="10dp"
+            android:paddingRight="75dp"
+            android:paddingBottom="10dp"
             android:text="Credit Card"
-            />
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/Sarawakpay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="35dp"
-            android:text="Sarawak Pay" />
+            android:layout_width="358dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:buttonTint="#CCA679"
+            android:drawableRight="@drawable/spay"
+            android:drawablePadding="15dp"
+            android:paddingLeft="75dp"
+            android:paddingTop="10dp"
+            android:paddingRight="75dp"
+            android:paddingBottom="10dp"
+            android:text="Sarawak Pay"
+            android:textSize="20sp" />
     </RadioGroup>
 
     <Button
         android:id="@+id/Bsave"
-        android:layout_width="250dp"
+        android:layout_width="358dp"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/login_button"
-        app:layout_constraintTop_toBottomOf="@id/radioGroup"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
-
-        />
+        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

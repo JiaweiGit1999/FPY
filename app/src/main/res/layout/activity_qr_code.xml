@@ -4,7 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QrCode">
+    tools:context=".QrCode"
+    android:theme="@style/Nunito">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Roboto">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp"
+            android:rotation="90"
+            android:src="@drawable/down_arrow"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_marginRight="50dp"
+            android:text="QR Code"
+            android:textColor="#383A4F"
+            android:textSize="25dp" />
+    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/qrcode"
@@ -15,25 +46,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/generateButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="30dp"
+        android:background="@drawable/qrbutton"
+        android:drawableRight="@drawable/ic_magicwand"
+        android:drawablePadding="15dp"
         android:text="Generate QR Code"
-
-        app:layout_constraintLeft_toLeftOf="@id/qrcode"
-        app:layout_constraintRight_toRightOf="@id/qrcode"
+        android:drawableTint="#5F6392"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:textAllCaps="false"
+        android:textColor="#5F6392"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/qrcode" />
 
     <Button
         android:id="@+id/sharebutton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/generateButton"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/qrbutton"
+        android:drawableRight="@drawable/ic_share"
+        android:drawablePadding="15dp"
+        android:text="Share"
+        android:drawableTint="#5F6392"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="95dp"
+        android:paddingRight="95dp"
+        android:textAllCaps="false"
+        android:textColor="#5F6392"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="share" />
+        app:layout_constraintTop_toBottomOf="@id/generateButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

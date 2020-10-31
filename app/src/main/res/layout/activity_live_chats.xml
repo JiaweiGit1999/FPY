@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="true"
-    tools:context=".LiveChat">
+    tools:context=".LiveChat"
+    android:theme="@style/Nunito">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatview"

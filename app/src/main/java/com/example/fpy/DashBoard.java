@@ -1,6 +1,8 @@
 package com.example.fpy;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import javax.annotation.Nullable;
+
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
@@ -61,9 +64,17 @@ public class DashBoard extends AppCompatActivity {
                     .load(mStorageRef.child(user.getImageurl()))
                     .into(imageView);
 
+        ImageView imageView = findViewById(R.id.profileIcon);
+        if (user.getImageurl() != null)
+            GlideApp.with(this /* context */)
+                    .load(mStorageRef.child(user.getImageurl()))
+                    .into(imageView);
+
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
-        NavigationView navigationView = findViewById(R.id.navview);
+      
+        NavigationView navigationView=findViewById(R.id.navview);
+        navigationView.setBackgroundResource(R.color.menuBackground);
 
         //on navigator options selected
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -85,24 +96,33 @@ public class DashBoard extends AppCompatActivity {
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
                         PasswordDialog();
                         return true;
-                    case R.id.live_chat:
-                        Intent intent2 = new Intent(DashBoard.this,live_chats.class);
-                        startActivity(intent2);
-                        return true;
-                    case R.id.logout:
-                        mAuth.signOut();
-                        //send to main activity
-                        Intent logoutintent = new Intent(DashBoard.this, login.class);
-                        startActivity(logoutintent);
-                        return true;
-
-                }
+                 }
                 return false;
             }
         });
 
+        //livechat
+        findViewById(R.id.live_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(DashBoard.this,live_chats.class);
+                startActivity(intent2);
+            }
+        });
+
+        //logout (TextView)
+        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                //send to main activity
+                Intent logoutintent = new Intent(DashBoard.this, login.class);
+                startActivity(logoutintent);
+            }
+        });
+
         //on nav view clicked
-        findViewById(R.id.imageView3).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.profileIcon).setOnClickListener(new View.OnClickListener() {
                                                              @Override
                                                              public void onClick(View view) {
                                                                  drawerLayout.openDrawer(GravityCompat.END);
@@ -119,8 +139,10 @@ public class DashBoard extends AppCompatActivity {
                                                              }
                                                          }
         );
+
+
         //flipper images
-        int images[] = {R.drawable.hello, R.drawable.wel};
+        int images[] = {R.drawable.ann1, R.drawable.ann2};
         slider = findViewById(R.id.slider1);
 
         for (int image : images) {

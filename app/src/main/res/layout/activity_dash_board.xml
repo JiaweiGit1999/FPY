@@ -52,14 +52,16 @@
                 android:textStyle="bold"
                 android:textSize="100px" />
 
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/profileIcon"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:scaleType="centerCrop"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="30dp"
-                app:srcCompat="@drawable/usericon" />
+                app:srcCompat="@drawable/usericon"
+                app:riv_oval="true" />
         </RelativeLayout>
 
         <ViewFlipper
@@ -240,6 +242,26 @@
             </androidx.cardview.widget.CardView>
         </GridLayout>
     </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/live_chat"-->
+<!--            android:layout_gravity="end"            -->
+<!--            />-->
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/live_chat"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/livechat"
+            android:layout_gravity="end | bottom"
+            android:layout_margin="16dp"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navview"

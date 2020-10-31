@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
@@ -31,6 +33,7 @@ import com.stripe.android.model.Address;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethod;
+import com.stripe.android.model.StripeIntent;
 import com.stripe.android.view.AddPaymentMethodActivityStarter;
 import com.stripe.android.view.FpxBank;
 import com.stripe.android.view.ShippingInfoWidget;
@@ -42,6 +45,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,13 +55,12 @@ import okhttp3.Response;
 
 public class CheckoutActivityOnline extends AppCompatActivity {
 
-    private String paymentIntentClientSecret;
+    private static String paymentIntentClientSecret;
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
-    private PaymentSession paymentSession;
-    private PaymentSession.PaymentSessionListener paymentSessionListener;
     private Stripe stripe;
-    private int amount;
+    private static int amount;
     private Map<String, String> payMap = new HashMap<>();
+    private static PaymentIntent paymentIntent;
 
     private Task<String> onlinePayment(String json) {
         return mFunctions
@@ -155,6 +158,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
 
     private void displayAlert(@NonNull String title,
                               @Nullable String message) {
+
         if (message != null)
             Log.v("Result", message);
         if (title.equals("Payment completed")) {
@@ -200,24 +204,27 @@ public class CheckoutActivityOnline extends AppCompatActivity {
             if (activity == null) {
                 return;
             }
-
-            PaymentIntent paymentIntent = result.getIntent();
+            paymentIntent = result.getIntent();
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
                 // Payment completed successfully
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 //If It is successful You will get detail in log and UI
                 Log.i("TAG", "onSuccess:Payment " + gson.toJson(paymentIntent));
+                savepayment();
                 activity.displayAlert(
                         "Payment completed",
                         gson.toJson(paymentIntent)
                 );
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
                 // Payment failed – allow retrying using a different payment method
+                savepayment();
                 activity.displayAlert(
                         "Payment failed",
                         Objects.requireNonNull(paymentIntent.getLastPaymentError()).getMessage()
                 );
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                Log.i("TAG", "onAuthentication:Payment " + gson.toJson(paymentIntent));
             }
         }
 
@@ -228,7 +235,39 @@ public class CheckoutActivityOnline extends AppCompatActivity {
                 return;
             }
             // Payment request failed – allow retrying using the same payment method
+            savepayment();
             activity.displayAlert("Error", e.toString());
         }
+    }
+
+    private static void savepayment() {
+        Map<String, Object> paymentdata = new HashMap<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference ref;
+        try {
+            ref = db.collection("payment").document(paymentIntent.getId());
+            paymentdata.put("payment_id", paymentIntent.getId());
+        } catch (Exception e) {
+            ref = db.collection("payment").document(paymentIntentClientSecret);
+            paymentdata.put("payment_id", paymentIntentClientSecret);
+        }
+        paymentdata.put("user_id", User.getInstance().getUid());
+        try {
+            if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded)
+                paymentdata.put("status", "Successful");
+            else
+                paymentdata.put("status", "Failed");
+        } catch (Exception e) {
+            paymentdata.put("status", "Failed");
+        }
+        paymentdata.put("amount", amount);
+        paymentdata.put("time", new Date().getTime());
+        paymentdata.put("payment_method", "FPX");
+        try {
+            paymentdata.put("bank", paymentIntent.getPaymentMethod().fpx.bank);
+        } catch (Exception e) {
+            paymentdata.put("bank", null);
+        }
+        ref.set(paymentdata);
     }
 }

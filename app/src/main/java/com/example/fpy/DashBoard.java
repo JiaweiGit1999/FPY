@@ -76,6 +76,12 @@ public class DashBoard extends AppCompatActivity {
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
 
+        ImageView imageView = findViewById(R.id.profileIcon);
+        if (user.getImageurl() != null)
+            GlideApp.with(this /* context */)
+                    .load(mStorageRef.child(user.getImageurl()))
+                    .into(imageView);
+
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
         NavigationView navigationView=findViewById(R.id.navview);
@@ -100,12 +106,17 @@ public class DashBoard extends AppCompatActivity {
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
                         return true;
-                    case R.id.live_chat:
-                        Intent intent2 = new Intent(DashBoard.this,live_chats.class);
-                        startActivity(intent2);
-                        return true;
                  }
                 return false;
+            }
+        });
+
+        //livechat
+        findViewById(R.id.live_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(DashBoard.this,live_chats.class);
+                startActivity(intent2);
             }
         });
 

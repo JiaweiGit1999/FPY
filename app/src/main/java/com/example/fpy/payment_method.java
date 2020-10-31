@@ -73,6 +73,7 @@ public class payment_method extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(payment_method.this, intentclass);
                     intent.putExtra("amount", total_amount);
+                    intent.putExtra("detail", details);
                     startActivity(intent);
                 }
             }

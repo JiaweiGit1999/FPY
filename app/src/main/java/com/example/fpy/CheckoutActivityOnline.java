@@ -59,6 +59,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
     private Stripe stripe;
     private static int amount;
+    private static String detail;
     private Map<String, String> payMap = new HashMap<>();
     private static PaymentIntent paymentIntent;
 
@@ -81,8 +82,11 @@ public class CheckoutActivityOnline extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout_online);
         Intent dataintent = getIntent();
-        if (dataintent != null)
+        if (dataintent != null) {
             amount = (int) dataintent.getDoubleExtra("amount", 0);
+            detail = dataintent.getStringExtra("detail");
+        }
+
         PaymentConfiguration.init(
                 getApplicationContext(),
                 "pk_test_51HYjjzF4IJ8BHvcZASjHh7DzctvdHJn2u9kQma9CnPvTbLPoqKm2LeonLfIaoZ7crChlTVsqtADSXslC60JkH9i100nXYkuYni"
@@ -263,6 +267,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
         paymentdata.put("amount", amount);
         paymentdata.put("time", new Date().getTime());
         paymentdata.put("payment_method", "FPX");
+        paymentdata.put("detail", detail);
         try {
             paymentdata.put("bank", paymentIntent.getPaymentMethod().fpx.bank);
         } catch (Exception e) {

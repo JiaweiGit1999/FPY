@@ -18,8 +18,4 @@
         android:id="@+id/password"
         android:icon="@drawable/key"
         android:title="Change Password" />
-    <item
-        android:id="@+id/live_chat"
-        android:icon="@drawable/chat"
-        android:title="Live Chat"/>
 </menu>

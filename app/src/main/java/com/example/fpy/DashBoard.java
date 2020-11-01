@@ -22,8 +22,13 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -34,10 +39,19 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.annotation.Nullable;
+
+import static com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG;
 
 
 public class DashBoard extends AppCompatActivity {
@@ -45,6 +59,7 @@ public class DashBoard extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private StorageReference mStorageRef;
     DocumentReference docRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -62,15 +77,19 @@ public class DashBoard extends AppCompatActivity {
         //views
 
         final TextView textusername = findViewById(R.id.name);
+        CardView cardView4 = findViewById(R.id.notice);
+        CardView cardView3 = findViewById(R.id.code);
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
         ImageView imageView = findViewById(R.id.profileIcon);
+
         if (user.getImageurl() != null)
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
                     .into(imageView);
 
         ImageView pIcon = findViewById(R.id.profileIcon);
+
         if (user.getImageurl() != null)
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
@@ -96,7 +115,8 @@ public class DashBoard extends AppCompatActivity {
                         Toast.makeText(DashBoard.this,"YOU3",Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.history:
-                        Toast.makeText(DashBoard.this,"1212",Toast.LENGTH_SHORT).show();
+                        Intent intent1 = new Intent(DashBoard.this,payment_history.class);
+                        startActivity(intent1);
                         return true;
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
@@ -146,7 +166,6 @@ public class DashBoard extends AppCompatActivity {
                                                          }
         );
 
-
         //flipper images
         int images[] = {R.drawable.ann1, R.drawable.ann2};
         slider = findViewById(R.id.slider1);
@@ -157,7 +176,47 @@ public class DashBoard extends AppCompatActivity {
         }
         //card views on click
 
-        CardView cardView3 = findViewById(R.id.code);
+        cardView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ArrayList<AnnouncementList> announcementList = new ArrayList<>();
+                FirebaseFirestore.getInstance().collection("announcement").orderBy("date", Query.Direction.DESCENDING)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        announcementList.add(new AnnouncementList(document.get("title").toString(), document.get("description").toString(), document.get("imageurl").toString(), new Date(document.getDate("date").getTime())));
+                                    }
+                                    Intent intent = new Intent(DashBoard.this, Notice.class);
+                                    intent.putParcelableArrayListExtra("announcement", announcementList);
+                                    startActivity(intent);
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+
+                FirebaseFirestore.getInstance().collection("announcement").document().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        if (snapshot != null && snapshot.exists()) {
+                            Log.d(TAG, "Current data: " + snapshot.getData());
+                        } else {
+                            Log.d(TAG, "Current data: null");
+                        }
+                    }
+                });
+            }
+        });
+
         cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

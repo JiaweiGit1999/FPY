@@ -68,6 +68,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
     private Button payButton;
     private double textamount = 0;
     private static int amount;
+    private static String detail;
     private static PaymentIntent paymentIntent;
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
 
@@ -94,6 +95,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
         if (dataintent != null) {
             textamount = dataintent.getDoubleExtra("amount", 0);
+            detail = dataintent.getStringExtra("detail");
         }
 
         mAmount = findViewById(R.id.amountText);
@@ -248,6 +250,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         paymentdata.put("time", new Date().getTime());
         paymentdata.put("payment_method", "Card");
         paymentdata.put("bank", null);
+        paymentdata.put("description", detail);
         ref.set(paymentdata);
     }
 }

@@ -15,6 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".payment_history" />
+        <activity android:name=".Announcement" />
+        <activity android:name=".Notice" />
         <activity android:name=".QrCode" />
         <activity android:name=".CheckoutActivitySarawakPay" />
         <activity android:name=".CheckoutActivityOnline" />

@@ -1,8 +1,10 @@
 package com.example.fpy;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.media.RingtoneManager;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -25,19 +27,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "dryx_residence")
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setStyle(new NotificationCompat.BigTextStyle())
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d("1", "1");
+                NotificationChannel channel = new NotificationChannel("dryx_residence", "dryx_residence", NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setDescription(remoteMessage.getNotification().getBody());
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "dryx_residence")
+                        .setContentTitle(remoteMessage.getNotification().getTitle())
+                        .setContentText(remoteMessage.getNotification().getBody())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setStyle(new NotificationCompat.BigTextStyle())
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+                notificationManager.createNotificationChannel(channel);
+                notificationManager.notify(0, notificationBuilder.build());
+            } else {
+                Log.d("2", "2");
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "dryx_residence")
+                        .setSmallIcon(R.drawable.usericon)
+                        .setContentTitle(remoteMessage.getNotification().getTitle())
+                        .setContentText(remoteMessage.getNotification().getBody())
+                        .setStyle(new NotificationCompat.BigTextStyle())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(0, builder.build());
+            }
+        } catch (Exception e) {
+            Log.d("Error", e.toString());
+        }
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages
         // are handled

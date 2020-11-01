@@ -99,7 +99,8 @@ public class DashBoard extends AppCompatActivity {
                         Toast.makeText(DashBoard.this,"YOU3",Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.history:
-                        Toast.makeText(DashBoard.this,"1212",Toast.LENGTH_SHORT).show();
+                        Intent intent1 = new Intent(DashBoard.this,payment_history.class);
+                        startActivity(intent1);
                         return true;
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();

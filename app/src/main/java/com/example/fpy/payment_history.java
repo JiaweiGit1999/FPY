@@ -24,7 +24,7 @@ public class payment_history extends AppCompatActivity {
 
     private FirebaseFirestore firebaseFirestore;
     private RecyclerView paymentlist;
-    private  FirestoreRecyclerAdapter adapter;
+    private FirestoreRecyclerAdapter adapter;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class payment_history extends AppCompatActivity {
                 return new paymentViewHolder(view);
             }
 
-
             @Override
             protected void onBindViewHolder(@NonNull paymentViewHolder paymentViewHolder, int i, @NonNull payment_model payment_model) {
 
@@ -69,17 +68,12 @@ public class payment_history extends AppCompatActivity {
                 {
                     
                 }
-
-
-
             }
         };
         paymentlist.setHasFixedSize(true);
         paymentlist.setLayoutManager(new LinearLayoutManager(this));
         paymentlist.setAdapter(adapter);
-
-
-        }
+    }
 
 
     private class paymentViewHolder extends RecyclerView.ViewHolder {

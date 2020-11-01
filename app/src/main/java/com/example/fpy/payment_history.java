@@ -30,10 +30,21 @@ public class payment_history extends AppCompatActivity {
     private RecyclerView paymentlist;
     private FirestoreRecyclerAdapter adapter;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_history);
+
+        ImageView imageView = findViewById(R.id.back_button);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         paymentlist=findViewById(R.id.paymentlist);
@@ -56,11 +67,11 @@ public class payment_history extends AppCompatActivity {
                 paymentViewHolder.Tamount.setText(String.format(Locale.ENGLISH, "RM %.2f", payment_model.getAmount() / 100));
                 paymentViewHolder.description.setText(payment_model.getDescription());
                 if (payment_model.getStatus().equals("Successful")) {
-                    paymentViewHolder.img.setImageResource(R.drawable.correction);
+                    paymentViewHolder.img.setImageResource(R.drawable.success);
                 } else if (payment_model.getStatus().equals("Failed")) {
-                    paymentViewHolder.img.setImageResource(R.drawable.cross);
+                    paymentViewHolder.img.setImageResource(R.drawable.fail);
                 }
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:ss aa");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d MMMM yyyy hh:ss aa");
                 paymentViewHolder.time.setText(simpleDateFormat.format(payment_model.getTime()));
             }
         };
@@ -101,4 +112,5 @@ public class payment_history extends AppCompatActivity {
         super.onStart();
         adapter.startListening();
     }
+
 }

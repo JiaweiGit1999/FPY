@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +30,7 @@ import java.util.List;
 public class login extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
-    EditText emailview,passwordview;
+    EditText emailview,passwordview,email;
     TextView message,forgotpassword;
     //set global variables
 
@@ -44,30 +45,33 @@ public class login extends AppCompatActivity {
         Button login = findViewById(R.id.login_button);
         forgotpassword = findViewById(R.id.forgotPassword);
 
+
         mAuth = FirebaseAuth.getInstance();
+
 
         forgotpassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
                 View popup = getLayoutInflater().inflate(R.layout.forgot_password,null);
-                final EditText email=popup.findViewById(R.id.email);
+                email=popup.findViewById(R.id.email);
                 Button save =popup.findViewById(R.id.save);
                 builder.setView(popup);
 
                 final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
                 alertDialog.setCanceledOnTouchOutside(true);
                 save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Log.d("Test: ",email.getText().toString());
+                        resetPassword();
+                        alertDialog.dismiss();
                     }
                 });
-                alertDialog.show();
-
-
             }
         });
+
 
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +102,25 @@ public class login extends AppCompatActivity {
                                 }
                             });
                 }
+            }
+        });
+    }
+
+    void resetPassword() {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(login.this,"Kindly Check Your Email",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(login.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+
             }
         });
     }

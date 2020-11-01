@@ -4,7 +4,7 @@ import java.sql.Time;
 
 public class payment_model {
 
-    private long amount;
+    private double amount;
     private String Status;
     private String user_id;
     private String description;
@@ -13,7 +13,7 @@ public class payment_model {
     private payment_model() {
     }
 
-    public payment_model(long amount, String status, String user_id, String description, long time) {
+    public payment_model(double amount, String status, String user_id, String description, long time) {
         this.amount = amount;
         Status = status;
         this.user_id = user_id;
@@ -29,7 +29,7 @@ public class payment_model {
         this.time = time;
     }
 
-    public long getAmount() {
+    public double getAmount() {
         return amount;
     }
 

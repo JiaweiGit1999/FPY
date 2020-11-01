@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class payment_history extends AppCompatActivity {
 
@@ -34,7 +38,7 @@ public class payment_history extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         paymentlist=findViewById(R.id.paymentlist);
 
-        Query query = firebaseFirestore.collection("payment");
+        Query query = firebaseFirestore.collection("payment").whereEqualTo("user_id", user.getUid());
 
         FirestoreRecyclerOptions<payment_model> options = new FirestoreRecyclerOptions.Builder<payment_model>()
                 .setQuery(query,payment_model.class)
@@ -43,31 +47,21 @@ public class payment_history extends AppCompatActivity {
             @NonNull
             @Override
             public paymentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.payment_history_list,parent,false);
-
                 return new paymentViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull paymentViewHolder paymentViewHolder, int i, @NonNull payment_model payment_model) {
-
-                if(payment_model.getUser_id().equals(user.getUid())) {
-                    paymentViewHolder.Tamount.setText(payment_model.getAmount() + "");
-                    paymentViewHolder.description.setText(payment_model.getDescription());
-
-                    if (payment_model.getStatus().equals("Successful")) {
-                        paymentViewHolder.img.setImageResource(R.drawable.correction);
-
-                    } else if (payment_model.getStatus().equals("Failed")) {
-                        paymentViewHolder.img.setImageResource(R.drawable.cross);
-                    }
-                    paymentViewHolder.time.setText(payment_model.getTime() + "");
+                paymentViewHolder.Tamount.setText(String.format(Locale.ENGLISH, "RM %.2f", payment_model.getAmount() / 100));
+                paymentViewHolder.description.setText(payment_model.getDescription());
+                if (payment_model.getStatus().equals("Successful")) {
+                    paymentViewHolder.img.setImageResource(R.drawable.correction);
+                } else if (payment_model.getStatus().equals("Failed")) {
+                    paymentViewHolder.img.setImageResource(R.drawable.cross);
                 }
-                else
-                {
-                    
-                }
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:ss aa");
+                paymentViewHolder.time.setText(simpleDateFormat.format(payment_model.getTime()));
             }
         };
         paymentlist.setHasFixedSize(true);

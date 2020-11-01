@@ -37,7 +37,7 @@ public class Announcement extends AppCompatActivity {
         if (dataintent != null) {
             try {
                 title.setText(dataintent.getStringExtra("title"));
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-mm-yyyy hh:ss");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:ss aa");
                 date.setText(simpleDateFormat.format(new Date(dataintent.getLongExtra("time", 0))));
                 GlideApp.with(Announcement.this)
                         .load(mStorageRef.child("announcement/" + dataintent.getStringExtra("imageurl")))

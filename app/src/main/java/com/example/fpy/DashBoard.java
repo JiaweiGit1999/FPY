@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +22,13 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -58,13 +64,13 @@ public class DashBoard extends AppCompatActivity {
         final TextView textusername = findViewById(R.id.name);
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
-        ImageView imageView = findViewById(R.id.imageView3);
+        ImageView imageView = findViewById(R.id.profileIcon);
         if (user.getImageurl() != null)
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
                     .into(imageView);
 
-        ImageView imageView = findViewById(R.id.profileIcon);
+        ImageView pIcon = findViewById(R.id.profileIcon);
         if (user.getImageurl() != null)
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
@@ -227,6 +233,7 @@ public class DashBoard extends AppCompatActivity {
     {
         final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoard.this);
         View popup = getLayoutInflater().inflate(R.layout.change_password,null);
+
         final EditText current_password=popup.findViewById(R.id.current_password);
         final EditText new_password=popup.findViewById(R.id.new_password);
         final EditText confirm_password=popup.findViewById(R.id.confirm_password);
@@ -239,6 +246,27 @@ public class DashBoard extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //Validate date
+                String currentPassword = current_password.getText().toString().trim();
+                String newPassword = new_password.getText().toString().trim();
+                String confirmPassword = confirm_password.getText().toString().trim();
+
+                if(TextUtils.isEmpty(currentPassword)){
+                    Toast.makeText(view.getContext(), "Enter your current password...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(newPassword.length() < 6){
+                    Toast.makeText(view.getContext(), "Password must be at least 6 characters long...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(confirmPassword == newPassword){
+                    Toast.makeText(view.getContext(), "Password updated", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                updatePassword(currentPassword, newPassword);
+
                 Log.d("Test CURRENT PASS: ",current_password.getText().toString());
                 Log.d("Test NEW PASS: ",new_password.getText().toString());
                 Log.d("Test: CONFIRM PASS",confirm_password.getText().toString());
@@ -253,5 +281,43 @@ public class DashBoard extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    private void updatePassword(String currentPassword, final String newPassword) {
+        //get current user
+        final FirebaseUser user = mAuth.getCurrentUser();
+
+        //before changing password, re-authenticate user
+        AuthCredential authCredential  = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+        user.reauthenticate(authCredential)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //successfully authenticated, begin update
+                        user.updatePassword(newPassword)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        //password update
+                                        Toast.makeText(getBaseContext(), "Password updated...", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        //fail to update password
+                                        Toast.makeText(getBaseContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //authenticate failed, show reason
+                        Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 }

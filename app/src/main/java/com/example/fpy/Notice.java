@@ -6,29 +6,22 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Notice extends AppCompatActivity {
 
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-    private User user = User.getInstance();
-    private RecyclerView recyclerView;
     private MyAdapter recycleAdapter = new MyAdapter();
     private ArrayList<AnnouncementList> announcementList = new ArrayList<>();
 
@@ -43,7 +36,7 @@ public class Notice extends AppCompatActivity {
         }
 
         ImageView button = findViewById(R.id.back_button);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(RecyclerView.VERTICAL);

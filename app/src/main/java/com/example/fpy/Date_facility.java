@@ -28,7 +28,6 @@ public class Date_facility extends AppCompatActivity {
         }
 
         ImageView imageView = findViewById(R.id.back_button);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

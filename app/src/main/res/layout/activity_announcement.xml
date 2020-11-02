@@ -5,40 +5,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Announcement">
+    tools:context=".Announcement"
+    android:theme="@style/Nunito">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         tools:text="TextView"
-        android:textSize="24sp"
-        android:textAlignment="center" />
+        android:textSize="28sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:background="#ffffff"/>
 
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
         android:textAlignment="center" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         tools:srcCompat="@tools:sample/avatars"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:padding="30dp"/>
 
     <TextView
         android:id="@+id/details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="20dp"
         tools:text="TextView"
-        android:textAlignment="center" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:justificationMode="inter_word"/>
 
     <Button
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
         android:text="Back" />
 </LinearLayout>

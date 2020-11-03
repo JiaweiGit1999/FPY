@@ -384,8 +384,8 @@ public class DashBoard extends AppCompatActivity {
         final EditText current_password = popup.findViewById(R.id.current_password);
         final EditText new_password = popup.findViewById(R.id.new_password);
         final EditText confirm_password = popup.findViewById(R.id.confirm_password);
-        Button save= popup.findViewById(R.id.confirm);
-        Button cancel=popup.findViewById(R.id.cancel);
+        Button save = popup.findViewById(R.id.confirm);
+        Button cancel = popup.findViewById(R.id.cancel);
         builder.setView(popup);
 
         final AlertDialog alertDialog = builder.create();

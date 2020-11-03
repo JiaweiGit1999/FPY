@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +62,8 @@ public class DashBoard extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private StorageReference mStorageRef;
     DocumentReference docRef;
+    ArrayList<AnnouncementList> announcementList = new ArrayList<>();
+    ArrayList<AnnouncementList> flipperImageAnnouncement = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,23 +168,36 @@ public class DashBoard extends AppCompatActivity {
                                                                  TextView username = findViewById(R.id.nav_username);
                                                                  username.setText(user.getUsername());
                                                              }
-                                                         }
+                                                          }
         );
 
         //flipper images
-        int images[] = {R.drawable.ann1, R.drawable.ann2};
         slider = findViewById(R.id.slider1);
 
-        for (int image : images) {
-            flipperimage(image);
-
-        }
-        //card views on click
+        FirebaseFirestore.getInstance().collection("announcement").orderBy("date", Query.Direction.DESCENDING).limit(2)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                flipperImageAnnouncement.add(new AnnouncementList(document.get("title").toString(), document.get("description").toString(), document.get("imageurl").toString(), new Date(document.getDate("date").getTime())));
+                                for (AnnouncementList announcement : flipperImageAnnouncement) {
+                                    flipperimage(announcement);
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        moveRight();
+        slider.setFlipInterval(4000);
+        slider.setAutoStart(true);
 
         cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ArrayList<AnnouncementList> announcementList = new ArrayList<>();
                 FirebaseFirestore.getInstance().collection("announcement").orderBy("date", Query.Direction.DESCENDING)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -276,27 +293,97 @@ public class DashBoard extends AppCompatActivity {
     }
 
     //flipper image setter
-    public void flipperimage(int image)
-    {
+    public void flipperimage(final AnnouncementList announcement) {
         ImageView imageView = new ImageView(this);
-        imageView.setBackgroundResource(image);
+        try {
+            GlideApp.with(this)
+                    .load(mStorageRef.child("announcement/" + announcement.getImageurl()))
+                    .into(imageView);
+        } catch (Exception e) {
+            Log.d("Error:", e.toString());
+            imageView.setImageResource(R.drawable.ann1);
+        }
+
+        imageView.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onClick() {
+                super.onClick();
+                // your on click here
+                Intent intent = new Intent(DashBoard.this, Announcement.class);
+                intent.putExtra("imageurl", announcement.getImageurl());
+                intent.putExtra("title", announcement.getTitle());
+                intent.putExtra("detail", announcement.getDescription());
+                intent.putExtra("time", announcement.getDate().getTime());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onDoubleClick() {
+                super.onDoubleClick();
+                // your on onDoubleClick here
+            }
+
+            @Override
+            public void onLongClick() {
+                super.onLongClick();
+                // your on onLongClick here
+            }
+
+            @Override
+            public void onSwipeUp() {
+                super.onSwipeUp();
+                // your swipe up here
+            }
+
+            @Override
+            public void onSwipeDown() {
+                super.onSwipeDown();
+                // your swipe down here.
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                // your swipe left here.
+                slider.stopFlipping();
+                moveLeft();
+                slider.showNext();
+                slider.startFlipping();
+                moveRight();
+            }
+
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                // your swipe right here.
+                slider.stopFlipping();
+                moveRight();
+                slider.showPrevious();
+                slider.startFlipping();
+            }
+        });
 
         slider.addView(imageView);
-        slider.setFlipInterval(4000);
-        slider.setAutoStart(true);
-        slider.setInAnimation(this,android.R.anim.slide_in_left);
-        slider.setInAnimation(this,android.R.anim.slide_out_right);
+    }
+
+    private void moveLeft() {
+        slider.setInAnimation(DashBoard.this, R.anim.slide_in_right);
+        slider.setOutAnimation(DashBoard.this, R.anim.slide_out_left);
+    }
+
+    private void moveRight() {
+        slider.setInAnimation(DashBoard.this, android.R.anim.slide_in_left);
+        slider.setOutAnimation(DashBoard.this, android.R.anim.slide_out_right);
     }
 
     //Alert Dialog
-    public void PasswordDialog()
-    {
+    public void PasswordDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoard.this);
-        View popup = getLayoutInflater().inflate(R.layout.change_password,null);
+        View popup = getLayoutInflater().inflate(R.layout.change_password, null);
 
-        final EditText current_password=popup.findViewById(R.id.current_password);
-        final EditText new_password=popup.findViewById(R.id.new_password);
-        final EditText confirm_password=popup.findViewById(R.id.confirm_password);
+        final EditText current_password = popup.findViewById(R.id.current_password);
+        final EditText new_password = popup.findViewById(R.id.new_password);
+        final EditText confirm_password = popup.findViewById(R.id.confirm_password);
         Button save= popup.findViewById(R.id.confirm);
         Button cancel=popup.findViewById(R.id.cancel);
         builder.setView(popup);

@@ -27,8 +27,6 @@ public class Payment extends AppCompatActivity {
         final TextView paydetails = findViewById(R.id.Edetail);
         TextView ordernumber = findViewById(R.id.Eordernumber);
 
-
-
         final double total_amount = 100;
 
         amount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", total_amount));
@@ -57,5 +55,16 @@ public class Payment extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isTaskRoot()) {
+            startActivity(new Intent(Payment.this, DashBoard.class));
+            // using finish() is optional, use it if you do not want to keep currentActivity in stack
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

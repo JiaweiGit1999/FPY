@@ -45,6 +45,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -75,6 +77,8 @@ public class DashBoard extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         final User user = User.getInstance();
+
+        FirebaseMessaging.getInstance().subscribeToTopic(user.getUid());
 
         //firebase links
         mStorageRef = FirebaseStorage.getInstance().getReference();

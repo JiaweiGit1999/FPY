@@ -56,6 +56,7 @@ import okhttp3.Response;
 public class CheckoutActivityOnline extends AppCompatActivity {
 
     private static String paymentIntentClientSecret;
+    private static String orderID;
     private FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
     private Stripe stripe;
     private static int amount;
@@ -80,11 +81,11 @@ public class CheckoutActivityOnline extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkout_online);
         Intent dataintent = getIntent();
         if (dataintent != null) {
             amount = (int) dataintent.getDoubleExtra("amount", 0);
             detail = dataintent.getStringExtra("detail");
+            orderID = dataintent.getStringExtra("order_id");
         }
 
         PaymentConfiguration.init(
@@ -101,7 +102,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
                 .build()
         );
 
-        payMap.put("amount", String.valueOf(amount * 100));
+        payMap.put("amount", String.valueOf(amount));
     }
 
     @Override
@@ -246,6 +247,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
 
     private static void savepayment() {
         Map<String, Object> paymentdata = new HashMap<>();
+        Map<String, Object> updatedata = new HashMap<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference ref;
         try {
@@ -257,9 +259,11 @@ public class CheckoutActivityOnline extends AppCompatActivity {
         }
         paymentdata.put("user_id", User.getInstance().getUid());
         try {
-            if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded)
+            if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded) {
                 paymentdata.put("status", "Successful");
-            else
+                updatedata.put("status", "paid");
+                updatedata.put("paid_date", new Date());
+            } else
                 paymentdata.put("status", "Failed");
         } catch (Exception e) {
             paymentdata.put("status", "Failed");
@@ -274,5 +278,6 @@ public class CheckoutActivityOnline extends AppCompatActivity {
             paymentdata.put("bank", null);
         }
         ref.set(paymentdata);
+        db.collection("billing").document(orderID).update(updatedata);
     }
 }

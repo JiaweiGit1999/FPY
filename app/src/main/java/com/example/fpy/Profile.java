@@ -130,7 +130,7 @@ public class Profile extends AppCompatActivity {
                 Map<String, Object> update = new HashMap<>();
                 if(newimage_status){
                     uploadFile();
-                    update.put("imageurl", user.getUid()+"." + getFileExtension(mImageUri));
+                    update.put("imageurl", user.getUid()+".png");
                 }else{
                     Log.d("image update status: ","no image selected");
                 }

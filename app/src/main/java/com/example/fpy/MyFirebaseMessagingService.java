@@ -2,7 +2,10 @@ package com.example.fpy;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.util.Log;
@@ -29,33 +32,50 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Log.d("1", "1");
                 NotificationChannel channel = new NotificationChannel("dryx_residence", "dryx_residence", NotificationManager.IMPORTANCE_DEFAULT);
                 channel.setDescription(remoteMessage.getNotification().getBody());
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "dryx_residence")
                         .setContentTitle(remoteMessage.getNotification().getTitle())
                         .setContentText(remoteMessage.getNotification().getBody())
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setStyle(new NotificationCompat.BigTextStyle())
+                        //.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        //.setStyle(new NotificationCompat.BigTextStyle())
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setAutoCancel(true);
 
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (remoteMessage.getFrom().contains(User.getInstance().getUid())) {
+                    Log.d("user", User.getInstance().getUid());
+                    Intent resultIntent = new Intent(this, Payment.class);
+                    PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notificationBuilder.setContentIntent(resultPendingIntent);
+                } else if (remoteMessage.getFrom().contains("announcement")) {
+                    Intent resultIntent = new Intent(this, Announcement.class);
+                    PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notificationBuilder.setContentIntent(resultPendingIntent);
+                }
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 notificationManager.createNotificationChannel(channel);
                 notificationManager.notify(0, notificationBuilder.build());
             } else {
-                Log.d("2", "2");
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "dryx_residence")
                         .setSmallIcon(R.drawable.usericon)
                         .setContentTitle(remoteMessage.getNotification().getTitle())
                         .setContentText(remoteMessage.getNotification().getBody())
                         .setStyle(new NotificationCompat.BigTextStyle())
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (remoteMessage.getFrom().contains(User.getInstance().getUid())) {
+                    Log.d("user", User.getInstance().getUid());
+                    Intent resultIntent = new Intent(this, Payment.class);
+                    PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(resultPendingIntent);
+                } else if (remoteMessage.getFrom().contains("announcement")) {
+                    Intent resultIntent = new Intent(this, Announcement.class);
+                    PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(resultPendingIntent);
+                }
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(0, builder.build());
             }
         } catch (Exception e) {

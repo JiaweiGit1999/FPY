@@ -55,4 +55,15 @@ public class Announcement extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        if (isTaskRoot()) {
+            startActivity(new Intent(Announcement.this, DashBoard.class));
+            // using finish() is optional, use it if you do not want to keep currentActivity in stack
+            finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

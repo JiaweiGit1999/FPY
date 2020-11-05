@@ -63,6 +63,7 @@ import okhttp3.Response;
 public class CheckoutActivityCredit extends AppCompatActivity {
 
     private static String paymentIntentClientSecret;
+    private static String orderID;
     private Stripe stripe;
     private TextView mAmount;
     private Button payButton;
@@ -96,6 +97,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         if (dataintent != null) {
             textamount = dataintent.getDoubleExtra("amount", 0);
             detail = dataintent.getStringExtra("detail");
+            orderID = dataintent.getStringExtra("order_id");
         }
 
         mAmount = findViewById(R.id.amountText);
@@ -110,8 +112,8 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
     private void startCheckout() {
         final ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        amount = (int) (textamount * 100);
-        mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", textamount));
+        amount = (int) (textamount);
+        mAmount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", textamount / 100));
         Map<String, String> payMap = new HashMap<>();
         payMap.put("currency", "myr");
         payMap.put("amount", String.valueOf(amount));
@@ -232,6 +234,7 @@ public class CheckoutActivityCredit extends AppCompatActivity {
 
     private static void savepayment() {
         Map<String, Object> paymentdata = new HashMap<>();
+        Map<String, Object> updatedata = new HashMap<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference ref;
         try {
@@ -242,9 +245,11 @@ public class CheckoutActivityCredit extends AppCompatActivity {
             paymentdata.put("payment_id", paymentIntentClientSecret);
         }
         paymentdata.put("user_id", User.getInstance().getUid());
-        if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded)
+        if (paymentIntent.getStatus() == PaymentIntent.Status.Succeeded) {
             paymentdata.put("status", "Successful");
-        else
+            updatedata.put("status", "paid");
+            updatedata.put("paid_date", new Date());
+        } else
             paymentdata.put("status", "Failed");
         paymentdata.put("amount", amount);
         paymentdata.put("time", new Date().getTime());
@@ -252,5 +257,6 @@ public class CheckoutActivityCredit extends AppCompatActivity {
         paymentdata.put("bank", null);
         paymentdata.put("description", detail);
         ref.set(paymentdata);
+        db.collection("billing").document(orderID).update(updatedata);
     }
 }

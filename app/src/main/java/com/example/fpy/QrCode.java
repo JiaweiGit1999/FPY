@@ -7,14 +7,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -27,63 +28,50 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class QrCode extends AppCompatActivity {
 
+    TextView timer;
     ImageView code;
-    Button generatecode,sharebutton;
-    String username, ic, contact,expire;
+    Button generatecode, sharebutton;
+    String username, ic, contact, expire;
     List<String> unit;
     User user = User.getInstance();
+    QrCodeList qrCodeList = QrCodeList.getInstance();
+    Calendar cal;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+    CountDownTimer countDownTimer;
+    boolean timerRunning = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code);
 
+        timer = findViewById(R.id.timer);
         code = findViewById(R.id.qrcode);
         generatecode = findViewById(R.id.generateButton);
+
+        if (qrCodeList.getUsername() != null && qrCodeList.getExpire() != null) {
+            if (new Date().getTime() > qrCodeList.getExpire().getTime().getTime())
+                getUserData();
+            else
+                getQrCodeList();
+            generateQrCode();
+        } else {
+            getUserData();
+            generateQrCode();
+        }
+
         generatecode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //get data from user class
-                username = user.getUsername();
-                ic = user.getIc();
-                contact = user.getContact();
-                unit = user.getUnit();
-
-                //get current time
-                Calendar cal = Calendar.getInstance();
-                //add 2 hours
-                cal.add(Calendar.HOUR_OF_DAY, 2);
-                // convert to string
-                expire = (String) DateFormat.format("hh:mm:ss", cal.getTime());
-
-                Log.d("qrcode:",expire);
-                String units = "";
-                //convert list to string
-                for (String s : unit) {
-                   units = units +","+ s;
-                }
-                //generate qrcode
-                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                try {
-                    BitMatrix bitMatrix = multiFormatWriter.encode("Unit: " + units +
-                            "\nOwner Contact: " + contact +
-                            "\nVisitor IC: " + ic +
-                            "\nVisitor Name: " + username+
-                            "\nexpire time: " + expire,
-                            BarcodeFormat.QR_CODE, 200, 200);
-                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                    code.setImageBitmap(bitmap);
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                }
-
-
+                getUserData();
+                generateQrCode();
             }
         });
         sharebutton = findViewById(R.id.sharebutton);
@@ -112,7 +100,7 @@ public class QrCode extends AppCompatActivity {
                 }
             }
         });
-      
+
         ImageView imageView = findViewById(R.id.back_button);
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -121,5 +109,68 @@ public class QrCode extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void getQrCodeList() {
+        username = qrCodeList.getUsername();
+        ic = qrCodeList.getIc();
+        contact = qrCodeList.getContact();
+        unit = qrCodeList.getUnit();
+        cal = qrCodeList.getExpire();
+    }
+
+    private void getUserData() {
+        //get data from user class
+        username = user.getUsername();
+        ic = user.getIc();
+        contact = user.getContact();
+        unit = user.getUnit();
+        //get current time
+        cal = Calendar.getInstance();
+        //add 2 hours
+        cal.add(Calendar.HOUR_OF_DAY, 2);
+    }
+
+    private void generateQrCode() {
+        if (timerRunning)
+            countDownTimer.cancel();
+        // convert to string
+        expire = (String) DateFormat.format("hh:mm:ss", cal.getTime());
+        qrCodeList.setExpire(cal);
+        qrCodeList.setIc(ic);
+        qrCodeList.setUnit(unit);
+        qrCodeList.setUsername(username);
+        qrCodeList.setContact(contact);
+        Log.d("qrcode:", expire);
+        String units = "";
+        //convert list to string
+        for (String s : unit) {
+            units = units + "," + s;
+        }
+        //generate qrcode
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode("Unit: " + units +
+                            "\nOwner Contact: " + contact +
+                            "\nOwner IC: " + ic +
+                            "\nOwner Name: " + username +
+                            "\nexpire time: " + expire,
+                    BarcodeFormat.QR_CODE, 200, 200);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            code.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        countDownTimer = new CountDownTimer(qrCodeList.getExpire().getTime().getTime() - new Date().getTime(), 1000) {
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Time Left: " + simpleDateFormat.format(millisUntilFinished));
+            }
+
+            public void onFinish() {
+                timer.setText("done!");
+            }
+        }.start();
+        timerRunning = true;
     }
 }

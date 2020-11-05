@@ -17,7 +17,7 @@ public class payment_method extends AppCompatActivity {
 
     private Class intentclass = payment_method.class;
     private double total_amount;
-    private String details;
+    private String details, orderID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,8 @@ public class payment_method extends AppCompatActivity {
         if (dataintent != null) {
             total_amount = dataintent.getDoubleExtra("amount", 0);
             details = dataintent.getStringExtra("detail");
-            amount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", total_amount));
+            orderID = dataintent.getStringExtra("order_id");
+            amount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", total_amount / 100));
             detail.setText(details);
         }
 
@@ -74,6 +75,7 @@ public class payment_method extends AppCompatActivity {
                     Intent intent = new Intent(payment_method.this, intentclass);
                     intent.putExtra("amount", total_amount);
                     intent.putExtra("detail", details);
+                    intent.putExtra("order_id", orderID);
                     startActivity(intent);
                 }
             }

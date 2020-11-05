@@ -50,7 +50,7 @@ public class Profile extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //user details
-    EditText ename, eemail, ephone, egender;
+    EditText ename, eemail, ephone, egender, eunit;
     TextView changephoto;
     User user;
     Button bsave;
@@ -72,6 +72,7 @@ public class Profile extends AppCompatActivity {
         eemail = findViewById(R.id.Eemail);
         ephone = findViewById(R.id.Ephone);
         egender = findViewById(R.id.Egender);
+        eunit = findViewById(R.id.Eunit);
         bsave = findViewById(R.id.Bsave);
         changephoto = findViewById(R.id.question);
         profilepic = findViewById(R.id.Puser);
@@ -89,6 +90,11 @@ public class Profile extends AppCompatActivity {
         ephone.setText(user.getContact());
         egender.setText(user.getGender());
         eemail.setText(user.getEmail());
+        ename.setEnabled(false);
+        ephone.setEnabled(false);
+        egender.setEnabled(false);
+        eemail.setEnabled(false);
+        eunit.setEnabled(false);
         if (user.getImageurl() != null) {
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))

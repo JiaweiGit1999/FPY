@@ -3,7 +3,9 @@ package com.example.fpy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,22 +18,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.internal.Constants;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class QrCode extends AppCompatActivity {
 
@@ -42,7 +52,7 @@ public class QrCode extends AppCompatActivity {
     List<String> unit;
     User user = User.getInstance();
     QrCodeList qrCodeList = QrCodeList.getInstance();
-    Calendar cal;
+    Calendar cal = Calendar.getInstance();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
     CountDownTimer countDownTimer;
     boolean timerRunning = false;
@@ -55,13 +65,29 @@ public class QrCode extends AppCompatActivity {
         timer = findViewById(R.id.timer);
         code = findViewById(R.id.qrcode);
         generatecode = findViewById(R.id.generateButton);
-
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         if (qrCodeList.getUsername() != null && qrCodeList.getExpire() != null) {
             if (new Date().getTime() > qrCodeList.getExpire().getTime().getTime())
                 getUserData();
             else
                 getQrCodeList();
             generateQrCode();
+        } else if (sharedPref.contains("username")) {
+            try {
+                username = sharedPref.getString("username", "");
+                ic = sharedPref.getString("ic", "");
+                contact = sharedPref.getString("contact", "");
+                unit = new ArrayList<>(sharedPref.getStringSet("unit", new HashSet<String>()));
+                Date expiredate = new Date(sharedPref.getLong("time", 0));
+                cal.setTime(expiredate);
+                if (new Date().getTime() > cal.getTime().getTime())
+                    getUserData();
+                generateQrCode();
+            } catch (Exception e) {
+                Log.d("Error", e.toString());
+                getUserData();
+                generateQrCode();
+            }
         } else {
             getUserData();
             generateQrCode();
@@ -120,21 +146,17 @@ public class QrCode extends AppCompatActivity {
     }
 
     private void getUserData() {
-        //get data from user class
         username = user.getUsername();
         ic = user.getIc();
         contact = user.getContact();
         unit = user.getUnit();
-        //get current time
         cal = Calendar.getInstance();
-        //add 2 hours
         cal.add(Calendar.HOUR_OF_DAY, 2);
     }
 
     private void generateQrCode() {
         if (timerRunning)
             countDownTimer.cancel();
-        // convert to string
         expire = (String) DateFormat.format("hh:mm:ss", cal.getTime());
         qrCodeList.setExpire(cal);
         qrCodeList.setIc(ic);
@@ -143,11 +165,11 @@ public class QrCode extends AppCompatActivity {
         qrCodeList.setContact(contact);
         Log.d("qrcode:", expire);
         String units = "";
-        //convert list to string
+        Set<String> stringSet = new HashSet<>();
         for (String s : unit) {
             units = units + "," + s;
+            stringSet.add(s);
         }
-        //generate qrcode
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix = multiFormatWriter.encode("Unit: " + units +
@@ -174,5 +196,12 @@ public class QrCode extends AppCompatActivity {
             }
         }.start();
         timerRunning = true;
+        SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+        editor.putString("username", username);
+        editor.putString("contact", contact);
+        editor.putString("ic", ic);
+        editor.putStringSet("unit", stringSet);
+        editor.putLong("time", cal.getTimeInMillis());
+        editor.apply();
     }
 }

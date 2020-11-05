@@ -169,6 +169,8 @@ public class QrCode extends AppCompatActivity {
 
             public void onFinish() {
                 timer.setText("done!");
+                /*getUserData();
+                generateQrCode();*/
             }
         }.start();
         timerRunning = true;

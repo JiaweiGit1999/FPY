@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Announcement"
+    android:theme="@style/Nunito">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Roboto">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp"
+            android:rotation="90"
+            android:src="@drawable/down_arrow"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_marginRight="50dp"
+            android:text="Tenant Details"
+            android:textColor="#383A4F"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Full Name"
+            android:textColor="#5F6392"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/fname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/full_name"
+            android:layout_marginLeft="20dp"
+            android:ems="20"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="370dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/fname" />
+
+        <TextView
+            android:id="@+id/ic_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fname"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Identication No."
+            android:textColor="#5F6392"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/icNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ic_number"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="370dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/icNumber"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/contact_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icNumber"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Contact No."
+            android:textColor="#5F6392"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/contactNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact_no"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="370dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/contactNo" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactNo"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Email"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="#5F6392"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/Eemail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/email"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="370dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/Eemail" />
+
+        <TextView
+            android:id="@+id/carplate_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Eemail"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Carplate No."
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="#5F6392"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/carplateNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/carplate_no"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="370dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/carplateNo" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

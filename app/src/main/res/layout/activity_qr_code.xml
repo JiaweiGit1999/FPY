@@ -37,6 +37,15 @@
             android:textSize="25dp" />
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Time Left:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/qrcode" />
+
     <ImageView
         android:id="@+id/qrcode"
         android:layout_width="300dp"
@@ -44,9 +53,8 @@
         android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/generateButton"
@@ -56,7 +64,7 @@
         android:background="@drawable/qrbutton"
         android:drawableRight="@drawable/ic_magicwand"
         android:drawablePadding="15dp"
-        android:text="Generate QR Code"
+        android:text="Generate new QR Code"
         android:drawableTint="#5F6392"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

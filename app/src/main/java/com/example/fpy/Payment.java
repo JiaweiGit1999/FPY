@@ -60,7 +60,7 @@ public class Payment extends AppCompatActivity {
                                 try {
                                     total_amount = document.getDouble("amount");
                                     amount.setText("RM " + String.format(Locale.ENGLISH, "%.2f", total_amount / 100));
-                                    paydate.setText(simpleDateFormat.format(new Date(document.getDate("date").getTime())));
+                                    paydate.setText(simpleDateFormat.format(new Date(document.getDate("due_date").getTime())));
                                     paydetails.setText(document.get("description").toString());
                                     ordernumber.setText(document.getId());
                                 } catch (Exception e) {
@@ -86,25 +86,20 @@ public class Payment extends AppCompatActivity {
             }
         });
 
-        if (total_amount == 0) {
-            savebutton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        savebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (total_amount == 0)
                     Toast.makeText(Payment.this, "You have paid the latest bill!", Toast.LENGTH_LONG).show();
-                }
-            });
-        } else {
-            savebutton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else {
                     Intent intent = new Intent(Payment.this, payment_method.class);
                     intent.putExtra("amount", total_amount);
                     intent.putExtra("detail", paydetails.getText());
                     intent.putExtra("order_id", ordernumber.getText());
                     startActivity(intent);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override

@@ -268,7 +268,7 @@ public class CheckoutActivityOnline extends AppCompatActivity {
         } catch (Exception e) {
             paymentdata.put("status", "Failed");
         }
-        paymentdata.put("amount", amount * 100);
+        paymentdata.put("amount", amount);
         paymentdata.put("time", new Date().getTime());
         paymentdata.put("payment_method", "FPX");
         paymentdata.put("description", detail);

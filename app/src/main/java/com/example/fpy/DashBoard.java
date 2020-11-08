@@ -107,14 +107,7 @@ public class DashBoard extends AppCompatActivity {
         CardView cardView3 = findViewById(R.id.code);
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
-        ImageView imageView = findViewById(R.id.profileIcon);
-
-        if (user.getImageurl() != null)
-            GlideApp.with(this /* context */)
-                    .load(mStorageRef.child(user.getImageurl()))
-                    .into(imageView);
-
-        ImageView pIcon = findViewById(R.id.profileIcon);
+        final ImageView imageView = findViewById(R.id.profileIcon);
 
         if (user.getImageurl() != null)
             GlideApp.with(this /* context */)

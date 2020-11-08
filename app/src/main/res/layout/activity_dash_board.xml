@@ -9,14 +9,15 @@
     android:id="@+id/drawable"
     android:background="#C8E0FF"
     >
-<!--    <fragment-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:id="@+id/navfrag"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        app:defaultNavHost="true"-->
-<!--        app:navGraph="@navigation/main"-->
-<!--        />-->
+
+    <!--    <fragment-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:id="@+id/navfrag"-->
+    <!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
+    <!--        app:defaultNavHost="true"-->
+    <!--        app:navGraph="@navigation/main"-->
+    <!--        />-->
 
     <LinearLayout
         android:layout_width="match_parent"

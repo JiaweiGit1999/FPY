@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -98,6 +99,8 @@ public class Profile extends AppCompatActivity {
         if (user.getImageurl() != null) {
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(profilepic);
         }
 
@@ -130,7 +133,7 @@ public class Profile extends AppCompatActivity {
                 Map<String, Object> update = new HashMap<>();
                 if(newimage_status){
                     uploadFile();
-                    update.put("imageurl", user.getUid()+".png");
+                    update.put("imageurl", user.getUid());
                 }else{
                     Log.d("image update status: ","no image selected");
                 }
@@ -141,7 +144,17 @@ public class Profile extends AppCompatActivity {
                 update.put("email", eemail.getText().toString());
 
                 //update firestore
-                docRef.set(update, SetOptions.merge());
+                docRef.set(update, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent openMainActivity = new Intent(Profile.this, DashBoard.class);
+                        openMainActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        setResult(1,openMainActivity);
+                        finish();
+                    }
+                });
+
+
             }
         });
 
@@ -179,7 +192,7 @@ public class Profile extends AppCompatActivity {
     }
     private void uploadFile() {
         if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(user.getUid()+"." + getFileExtension(mImageUri));
+            StorageReference fileReference = mStorageRef.child(user.getUid());
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

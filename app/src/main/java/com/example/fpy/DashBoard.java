@@ -26,6 +26,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -109,16 +110,14 @@ public class DashBoard extends AppCompatActivity {
         CardView cardView1 = findViewById(R.id.Payment);
         ImageView imageView = findViewById(R.id.profileIcon);
 
-        if (user.getImageurl() != null)
-            GlideApp.with(this /* context */)
-                    .load(mStorageRef.child(user.getImageurl()))
-                    .into(imageView);
-
         ImageView pIcon = findViewById(R.id.profileIcon);
 
         if (user.getImageurl() != null)
+            imageView.setImageDrawable(null);
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(imageView);
 
         textusername.setText(user.getUsername());
@@ -182,9 +181,14 @@ public class DashBoard extends AppCompatActivity {
                                                                      //update profile pic
                                                                      ImageView userpic = findViewById(R.id.userpic);
                                                                      Log.d("profile ",user.getImageurl());
+
                                                                      GlideApp.with(DashBoard.this /* context */)
                                                                              .load(mStorageRef.child(user.getImageurl()))
+                                                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                                             .skipMemoryCache(true)
                                                                              .into(userpic);
+
+
                                                                  }
                                                                  TextView username = findViewById(R.id.nav_username);
                                                                  username.setText(user.getUsername());
@@ -292,6 +296,12 @@ public class DashBoard extends AppCompatActivity {
 
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     textusername.setText(documentSnapshot.getString("name"));
+                    ImageView userpic = findViewById(R.id.userpic);
+                    userpic.setImageDrawable(null);
+                    Log.d("profile ",user.getImageurl());
+                    GlideApp.with(DashBoard.this /* context */)
+                            .load(mStorageRef.child(user.getImageurl()))
+                            .into(userpic);
                 } else {
                     System.out.print("Current data: null");
                 }
@@ -304,13 +314,28 @@ public class DashBoard extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.profile11)
         {
-            Toast.makeText(this,"YOU CLICKED PROFILE",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"YOU CLICKED PROFILE",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(DashBoard.this,Profile.class);
-            startActivity(intent);
+            startActivityForResult(intent,1);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        User user = User.getInstance();
+
+        ImageView userpic = findViewById(R.id.profileIcon);
+        userpic.setImageDrawable(null);
+        Log.d("profile ",user.getImageurl());
+        GlideApp.with(DashBoard.this /* context */)
+                .load(mStorageRef.child(user.getImageurl()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(userpic);
     }
 
     //flipper image setter
@@ -324,6 +349,9 @@ public class DashBoard extends AppCompatActivity {
             Log.d("Error:", e.toString());
             imageView.setImageResource(R.drawable.ann1);
         }
+
+
+
 
         imageView.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -487,6 +515,28 @@ public class DashBoard extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("Profile","received result");
+        Log.d("Profile",getString(requestCode));
+        Log.d("Profile",getString(resultCode));
+
+        if (requestCode == 1) {
+            if(resultCode == 1){
+
+                User user = User.getInstance();
+                ImageView imageView = findViewById(R.id.profileIcon);
+                imageView.setImageDrawable(null);
+                GlideApp.with(this /* context */)
+                        .load(mStorageRef.child(user.getImageurl()))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(imageView);
+            }
+        }
     }
 
     boolean doubleBackToExitPressedOnce = false;

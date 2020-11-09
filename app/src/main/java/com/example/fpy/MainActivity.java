@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         //if user exist,
         if (currentUser != null) {
+            
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

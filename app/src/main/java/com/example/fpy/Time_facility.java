@@ -91,7 +91,8 @@ public class Time_facility extends AppCompatActivity implements AdapterView.OnIt
                             Long takensoon = 5L;
                             String stringduration = document.getString("duration").replace(" hours","");
                             Long duration = Long.parseLong(stringduration);
-                            if(document.getString("facility") == booking.getFacility()) {
+                            Log.d("Booking: ",booking.getFacility());
+                            if(document.getString("facility").equals(booking.getFacility()) ) {
                                 try {
 
                                     String selectedtime = booking.getDate()+" "+booking.getTime();

@@ -131,7 +131,12 @@ public class DashBoard extends AppCompatActivity {
                         startActivity(intent);
                         return true;
                     case R.id.reminder:
-                        Toast.makeText(DashBoard.this,"YOU3",Toast.LENGTH_SHORT).show();
+                        Intent intent3 = new Intent(DashBoard.this,reminder.class);
+                        startActivity(intent3);
+                        return true;
+                    case R.id.booking:
+                        Intent intent6 = new Intent(DashBoard.this,booking_reminder.class);
+                        startActivity(intent6);
                         return true;
                     case R.id.history:
                         Intent intent1 = new Intent(DashBoard.this,payment_history.class);
@@ -140,6 +145,10 @@ public class DashBoard extends AppCompatActivity {
                     case R.id.password:
                         Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
                         PasswordDialog();
+                        return true;
+                    case R.id.list:
+                        Intent intent5 = new Intent(DashBoard.this,UnitsOwned.class);
+                        startActivity(intent5);
                         return true;
                  }
                 return false;
@@ -397,7 +406,6 @@ public class DashBoard extends AppCompatActivity {
 
         final EditText current_password = popup.findViewById(R.id.current_password);
         final EditText new_password = popup.findViewById(R.id.new_password);
-        final EditText confirm_password = popup.findViewById(R.id.confirm_password);
         Button save = popup.findViewById(R.id.confirm);
         Button cancel = popup.findViewById(R.id.cancel);
         builder.setView(popup);
@@ -411,7 +419,7 @@ public class DashBoard extends AppCompatActivity {
                 //Validate date
                 String currentPassword = current_password.getText().toString().trim();
                 String newPassword = new_password.getText().toString().trim();
-                String confirmPassword = confirm_password.getText().toString().trim();
+
 
                 if(TextUtils.isEmpty(currentPassword)){
                     Toast.makeText(view.getContext(), "Enter your current password...", Toast.LENGTH_SHORT).show();
@@ -421,16 +429,13 @@ public class DashBoard extends AppCompatActivity {
                     Toast.makeText(view.getContext(), "Password must be at least 6 characters long...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(confirmPassword == newPassword){
-                    Toast.makeText(view.getContext(), "Password updated", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
 
                 updatePassword(currentPassword, newPassword);
 
                 Log.d("Test CURRENT PASS: ",current_password.getText().toString());
                 Log.d("Test NEW PASS: ",new_password.getText().toString());
-                Log.d("Test: CONFIRM PASS",confirm_password.getText().toString());
+
 
             }
         });

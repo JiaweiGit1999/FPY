@@ -56,6 +56,7 @@ public class QrCode extends AppCompatActivity {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
     CountDownTimer countDownTimer;
     boolean timerRunning = false;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +158,7 @@ public class QrCode extends AppCompatActivity {
     private void generateQrCode() {
         if (timerRunning)
             countDownTimer.cancel();
-        expire = (String) DateFormat.format("hh:mm:ss", cal.getTime());
+        expire = String.valueOf(cal.getTime().getTime());
         qrCodeList.setExpire(cal);
         qrCodeList.setIc(ic);
         qrCodeList.setUnit(unit);
@@ -166,8 +167,12 @@ public class QrCode extends AppCompatActivity {
         Log.d("qrcode:", expire);
         String units = "";
         Set<String> stringSet = new HashSet<>();
+        i = 0;
         for (String s : unit) {
-            units = units + "," + s;
+            if (i == 0)
+                units += s;
+            else
+                units += "," + s;
             stringSet.add(s);
         }
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
@@ -176,7 +181,7 @@ public class QrCode extends AppCompatActivity {
                             "\nOwner Contact: " + contact +
                             "\nOwner IC: " + ic +
                             "\nOwner Name: " + username +
-                            "\nexpire time: " + expire,
+                            "\nExpire time: " + expire,
                     BarcodeFormat.QR_CODE, 200, 200);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);

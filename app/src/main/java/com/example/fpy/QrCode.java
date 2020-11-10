@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.xml.datatype.Duration;
+
 public class QrCode extends AppCompatActivity {
 
     TextView timer;
@@ -53,6 +55,7 @@ public class QrCode extends AppCompatActivity {
     User user = User.getInstance();
     QrCodeList qrCodeList = QrCodeList.getInstance();
     Calendar cal = Calendar.getInstance();
+    Calendar currentTime = Calendar.getInstance();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
     CountDownTimer countDownTimer;
     boolean timerRunning = false;
@@ -68,27 +71,11 @@ public class QrCode extends AppCompatActivity {
         generatecode = findViewById(R.id.generateButton);
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         if (qrCodeList.getUsername() != null && qrCodeList.getExpire() != null) {
-            if (new Date().getTime() > qrCodeList.getExpire().getTime().getTime())
+            if (currentTime.after(qrCodeList.getExpire()))
                 getUserData();
             else
                 getQrCodeList();
             generateQrCode();
-        } else if (sharedPref.contains("username")) {
-            try {
-                username = sharedPref.getString("username", "");
-                ic = sharedPref.getString("ic", "");
-                contact = sharedPref.getString("contact", "");
-                unit = new ArrayList<>(sharedPref.getStringSet("unit", new HashSet<String>()));
-                Date expiredate = new Date(sharedPref.getLong("time", 0));
-                cal.setTime(expiredate);
-                if (new Date().getTime() > cal.getTime().getTime())
-                    getUserData();
-                generateQrCode();
-            } catch (Exception e) {
-                Log.d("Error", e.toString());
-                getUserData();
-                generateQrCode();
-            }
         } else {
             getUserData();
             generateQrCode();
@@ -190,9 +177,18 @@ public class QrCode extends AppCompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-        countDownTimer = new CountDownTimer(qrCodeList.getExpire().getTime().getTime() - new Date().getTime(), 1000) {
+
+        countDownTimer = new CountDownTimer(cal.getTimeInMillis() - currentTime.getTimeInMillis(), 1000) {
             public void onTick(long millisUntilFinished) {
-                timer.setText("Time Left: " + simpleDateFormat.format(millisUntilFinished));
+                Log.d("time_left", String.valueOf(millisUntilFinished));
+                int second = Math.toIntExact(millisUntilFinished / 1000);
+                int minute = second / 60;
+                int hour = minute / 60;
+                minute = minute % 60;
+                second = second % 60;
+
+
+                timer.setText("Time Left: " + String.format(Locale.ENGLISH, "%02d:%02d:%02d", hour, minute, second));
             }
 
             public void onFinish() {
@@ -201,6 +197,7 @@ public class QrCode extends AppCompatActivity {
                 generateQrCode();*/
             }
         }.start();
+
         timerRunning = true;
         SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
         editor.putString("username", username);

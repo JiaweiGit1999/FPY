@@ -88,7 +88,7 @@
             android:theme="@style/Nunito">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/Payment"
+                android:id="@+id/notice"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
@@ -110,14 +110,14 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_dollar">
-                    </ImageView>
+                        android:src="@drawable/ic_promotion"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Payment"
+                        android:text="News"
                         android:layout_gravity="center"
+                        android:textAlignment="center"
                         android:textColor="#CCA679"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -204,7 +204,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/notice"
+                android:id="@+id/Payment"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
@@ -227,15 +227,13 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_promotion">
-                    </ImageView>
+                        android:src="@drawable/ic_dollar"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="News"
+                        android:text="Payment"
                         android:layout_gravity="center"
-                        android:textAlignment="center"
                         android:textColor="#CCA679"
                         android:textSize="20sp"
                         android:textStyle="bold" />

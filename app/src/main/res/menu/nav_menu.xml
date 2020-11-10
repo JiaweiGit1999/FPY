@@ -6,27 +6,27 @@
         android:title="Edit Profile"/>
 
     <item
-        android:id="@+id/reminder"
-        android:icon="@drawable/notification"
-        android:title="Payment Reminder"/>
-    <item
         android:id="@+id/booking"
         android:icon="@drawable/booking"
-        android:title="Booking Detail"
+        android:title="Booking Detail" />
 
-        />
-
-    <item
-        android:id="@+id/history"
-        android:icon="@drawable/history"
-        android:title="Payment History"/>
     <item
         android:id="@+id/password"
         android:icon="@drawable/key"
         android:title="Change Password" />
+
+    <item
+        android:id="@+id/reminder"
+        android:icon="@drawable/notification"
+        android:title="Payment Reminder" />
+
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/history"
+        android:title="Payment History" />
+
     <item
         android:id="@+id/list"
         android:title="Tenant List"
-        android:icon="@drawable/book"
-        />
+        android:icon="@drawable/book" />
 </menu>

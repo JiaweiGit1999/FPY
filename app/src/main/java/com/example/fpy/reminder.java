@@ -51,7 +51,7 @@ public class reminder extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         reminderlist=findViewById(R.id.paymentreminder);
 
-        Query query = firebaseFirestore.collection("billing").whereEqualTo("user_id", user.getUid());
+        Query query = firebaseFirestore.collection("billing").whereEqualTo("user_id", user.getUid()).whereEqualTo("status", "unpaid");
 
         FirestoreRecyclerOptions<paymentlist> options = new FirestoreRecyclerOptions.Builder<paymentlist>()
                 .setQuery(query,paymentlist.class)
@@ -68,7 +68,7 @@ public class reminder extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull RpaymentViewHolder holder, int position, @NonNull paymentlist model) {
 
                 holder.description.setText(model.getDescription());
-                holder.amount.setText(String.format(Locale.ENGLISH, "RM %.2f", model.getAmount() ));
+                holder.amount.setText(String.format(Locale.ENGLISH, "RM %.2f", model.getAmount() / 100));
 
             }
         };

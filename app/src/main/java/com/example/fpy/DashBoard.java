@@ -1,15 +1,12 @@
 package com.example.fpy;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,23 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -48,18 +38,12 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import javax.annotation.Nullable;
-
 import static com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG;
-
 
 public class DashBoard extends AppCompatActivity {
     ViewFlipper slider;
@@ -116,26 +100,41 @@ public class DashBoard extends AppCompatActivity {
 
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
-      
-        NavigationView navigationView=findViewById(R.id.navview);
+
+        NavigationView navigationView = findViewById(R.id.navview);
         navigationView.setBackgroundResource(R.color.menuBackground);
+        Menu menu = navigationView.getMenu();
+        ;
+
+        if (user.getRole().equals("tenant")) {
+            menu.findItem(R.id.list).setEnabled(false).setVisible(false);
+            menu.findItem(R.id.history).setEnabled(false).setVisible(false);
+            menu.findItem(R.id.reminder).setEnabled(false).setVisible(false);
+            cardView1.setEnabled(false);
+            cardView1.setVisibility(View.GONE);
+        } else {
+            menu.findItem(R.id.list).setEnabled(true).setVisible(true);
+            menu.findItem(R.id.history).setEnabled(true).setVisible(true);
+            menu.findItem(R.id.reminder).setEnabled(true).setVisible(true);
+            cardView1.setEnabled(true);
+            cardView1.setVisibility(View.VISIBLE);
+        }
 
         //on navigator options selected
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId())
-                {
+                switch (menuItem.getItemId()) {
                     case R.id.profile11:
-                        Intent intent = new Intent(DashBoard.this,Profile.class);
+                        Intent intent = new Intent(DashBoard.this, Profile.class);
                         startActivity(intent);
                         return true;
                     case R.id.reminder:
-                        Intent intent3 = new Intent(DashBoard.this,reminder.class);
+                        Intent intent3 = new Intent(DashBoard.this, reminder.class);
                         startActivity(intent3);
                         return true;
                     case R.id.booking:
-                        Intent intent6 = new Intent(DashBoard.this,booking_reminder.class);
+                        Intent intent6 = new Intent(DashBoard.this, booking_reminder.class);
                         startActivity(intent6);
                         return true;
                     case R.id.history:
@@ -143,7 +142,6 @@ public class DashBoard extends AppCompatActivity {
                         startActivity(intent1);
                         return true;
                     case R.id.password:
-                        Toast.makeText(DashBoard.this,"12112",Toast.LENGTH_SHORT).show();
                         PasswordDialog();
                         return true;
                     case R.id.list:
@@ -306,7 +304,6 @@ public class DashBoard extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.profile11)
         {
-            Toast.makeText(this,"YOU CLICKED PROFILE",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(DashBoard.this,Profile.class);
             startActivity(intent);
             return true;
@@ -420,7 +417,6 @@ public class DashBoard extends AppCompatActivity {
                 String currentPassword = current_password.getText().toString().trim();
                 String newPassword = new_password.getText().toString().trim();
 
-
                 if(TextUtils.isEmpty(currentPassword)){
                     Toast.makeText(view.getContext(), "Enter your current password...", Toast.LENGTH_SHORT).show();
                     return;
@@ -430,13 +426,9 @@ public class DashBoard extends AppCompatActivity {
                     return;
                 }
 
-
                 updatePassword(currentPassword, newPassword);
-
                 Log.d("Test CURRENT PASS: ",current_password.getText().toString());
                 Log.d("Test NEW PASS: ",new_password.getText().toString());
-
-
             }
         });
 

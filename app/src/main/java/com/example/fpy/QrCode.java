@@ -174,6 +174,7 @@ public class QrCode extends AppCompatActivity {
             else
                 units += "," + s;
             stringSet.add(s);
+            i++;
         }
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {

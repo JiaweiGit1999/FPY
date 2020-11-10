@@ -159,33 +159,5 @@
             android:background="@android:color/darker_gray"
             android:layout_below="@id/Eemail" />
 
-        <TextView
-            android:id="@+id/carplate_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/Eemail"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:text="Carplate No."
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="#5F6392"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/carplateNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/carplate_no"
-            android:layout_marginLeft="20dp"
-            android:ems="10"
-            android:fontFamily="@font/roboto_light"
-            android:textSize="25sp" />
-
-        <View
-            android:layout_width="370dp"
-            android:layout_height="1dp"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/darker_gray"
-            android:layout_below="@id/carplateNo" />
-    </RelativeLayout>
+        </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

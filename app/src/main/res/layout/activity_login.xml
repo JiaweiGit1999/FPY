@@ -38,6 +38,7 @@
         android:layout_width="260dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
+        android:inputType="textPassword"
         android:background="@drawable/shape"
         android:drawableStart="@drawable/password"
         android:drawablePadding="15dp"

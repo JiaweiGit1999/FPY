@@ -1,6 +1,7 @@
 package com.example.fpy;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -14,12 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,18 +45,25 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.annotation.Nullable;
+
 import static com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG;
 
 public class DashBoard extends AppCompatActivity {
+    private UserImage userImage;
+    User user;
     ViewFlipper slider;
     private FirebaseAuth mAuth;
     private StorageReference mStorageRef;
     DocumentReference docRef;
     ArrayList<AnnouncementList> announcementList = new ArrayList<>();
     ArrayList<AnnouncementList> flipperImageAnnouncement = new ArrayList<>();
+    ImageView imageView, userpic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +75,15 @@ public class DashBoard extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         String imgname = "";
-        final User user = User.getInstance();
+        user = User.getInstance();
+        userImage = UserImage.getInstance();
 
         FirebaseMessaging.getInstance().subscribeToTopic(user.getUid());
 
         //firebase links
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference AnnouncementRef = mStorageRef.child("announcement/"+imgname);
+
+        StorageReference AnnouncementRef = mStorageRef.child("announcement/" + imgname);
         final long ONE_MEGABYTE = 1024 * 1024;
         AnnouncementRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
@@ -91,12 +105,15 @@ public class DashBoard extends AppCompatActivity {
         CardView cardView3 = findViewById(R.id.code);
         CardView cardView2 = findViewById(R.id.facility);
         CardView cardView1 = findViewById(R.id.Payment);
-        final ImageView imageView = findViewById(R.id.profileIcon);
+        imageView = findViewById(R.id.profileIcon);
 
-        if (user.getImageurl() != null)
-            GlideApp.with(this /* context */)
+        if (user.getImageurl() != null) {
+            GlideApp.with(DashBoard.this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
+                    .signature(new ObjectKey(userImage.getDate()))
+                    .error(R.drawable.usericon)
                     .into(imageView);
+        }
 
         textusername.setText(user.getUsername());
         final DrawerLayout drawerLayout = findViewById(R.id.drawable);
@@ -127,7 +144,7 @@ public class DashBoard extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.profile11:
                         Intent intent = new Intent(DashBoard.this, Profile.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, 0);
                         return true;
                     case R.id.reminder:
                         Intent intent3 = new Intent(DashBoard.this, reminder.class);
@@ -180,10 +197,12 @@ public class DashBoard extends AppCompatActivity {
                                                                  drawerLayout.openDrawer(GravityCompat.END);
                                                                  if(user.getImageurl()!=null){
                                                                      //update profile pic
-                                                                     ImageView userpic = findViewById(R.id.userpic);
-                                                                     Log.d("profile ",user.getImageurl());
+                                                                     userpic = findViewById(R.id.userpic);
+                                                                     Log.d("profile ", user.getImageurl());
                                                                      GlideApp.with(DashBoard.this /* context */)
                                                                              .load(mStorageRef.child(user.getImageurl()))
+                                                                             .signature(new ObjectKey(userImage.getDate()))
+                                                                             .error(R.drawable.usericon)
                                                                              .into(userpic);
                                                                  }
                                                                  TextView username = findViewById(R.id.nav_username);
@@ -305,8 +324,7 @@ public class DashBoard extends AppCompatActivity {
         if(item.getItemId()==R.id.profile11)
         {
             Intent intent = new Intent(DashBoard.this,Profile.class);
-            startActivity(intent);
-            return true;
+            startActivityForResult(intent, 0);
         }
 
         return super.onOptionsItemSelected(item);
@@ -498,5 +516,22 @@ public class DashBoard extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_SHORT).show();
+        userImage = UserImage.getInstance();
+        GlideApp.with(DashBoard.this /* context */)
+                .load(mStorageRef.child(user.getImageurl()))
+                .signature(new ObjectKey(userImage.getDate()))
+                .error(R.drawable.usericon)
+                .into(imageView);
+        GlideApp.with(DashBoard.this /* context */)
+                .load(mStorageRef.child(user.getImageurl()))
+                .signature(new ObjectKey(userImage.getDate()))
+                .error(R.drawable.usericon)
+                .into(userpic);
     }
 }

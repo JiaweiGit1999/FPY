@@ -90,11 +90,11 @@ public class CheckoutActivityOnline extends AppCompatActivity {
 
         PaymentConfiguration.init(
                 getApplicationContext(),
-                "pk_test_51HYjjzF4IJ8BHvcZASjHh7DzctvdHJn2u9kQma9CnPvTbLPoqKm2LeonLfIaoZ7crChlTVsqtADSXslC60JkH9i100nXYkuYni"
+                "pk_test_51HmpphAKsIRleTRbL8qxNUc97rkqnpYJRMpJ8JBry543rJ7PEXsv9vkr0JlqnjIK442Hb6c5IY7lcw7dall9vHs600xi3UqAyZ"
         );
         stripe = new Stripe(
                 getApplicationContext(),
-                Objects.requireNonNull("pk_test_51HYjjzF4IJ8BHvcZASjHh7DzctvdHJn2u9kQma9CnPvTbLPoqKm2LeonLfIaoZ7crChlTVsqtADSXslC60JkH9i100nXYkuYni") //Your publishable key
+                Objects.requireNonNull("pk_test_51HmpphAKsIRleTRbL8qxNUc97rkqnpYJRMpJ8JBry543rJ7PEXsv9vkr0JlqnjIK442Hb6c5IY7lcw7dall9vHs600xi3UqAyZ") //Your publishable key
         );
         AddPaymentMethodActivityStarter addPaymentMethodActivityStarter = new AddPaymentMethodActivityStarter(this);
         addPaymentMethodActivityStarter.startForResult(new AddPaymentMethodActivityStarter.Args.Builder()

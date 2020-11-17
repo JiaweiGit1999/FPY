@@ -3,6 +3,7 @@ package com.example.fpy;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,10 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -33,6 +37,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +46,7 @@ import javax.annotation.Nullable;
 public class Profile extends AppCompatActivity {
     //track image request
     private static final int PICK_IMAGE_REQUEST = 1;
+    private UserImage userImage;
     private Uri mImageUri;
     private boolean newimage_status = false;
     private StorageReference mStorageRef;
@@ -63,6 +69,7 @@ public class Profile extends AppCompatActivity {
 
         //initialize data
         user = User.getInstance();
+        userImage = UserImage.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
         Log.d("profile: ", user.getUid());
         final DocumentReference docRef = db.collection("landlord").document(user.getUid());
@@ -98,6 +105,8 @@ public class Profile extends AppCompatActivity {
         if (user.getImageurl() != null) {
             GlideApp.with(this /* context */)
                     .load(mStorageRef.child(user.getImageurl()))
+                    .signature(new ObjectKey(userImage.getDate()))
+                    .error(R.drawable.usericon)
                     .into(profilepic);
         }
 
@@ -186,7 +195,10 @@ public class Profile extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                             Toast.makeText(Profile.this, "Upload successful", Toast.LENGTH_LONG).show();
-
+                            userImage.setDate(new Date());
+/*                        Intent intent = new Intent(Profile.this, DashBoard.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);*/
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -198,5 +210,12 @@ public class Profile extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
     }
 }

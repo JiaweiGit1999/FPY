@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -195,6 +196,7 @@ public class Profile extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                             Toast.makeText(Profile.this, "Upload successful", Toast.LENGTH_LONG).show();
+                            Glide.get(getApplicationContext()).clearDiskCache();
                             userImage.setDate(new Date());
 /*                        Intent intent = new Intent(Profile.this, DashBoard.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

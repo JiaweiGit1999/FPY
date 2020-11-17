@@ -1,5 +1,6 @@
 package com.example.fpy;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -521,17 +522,18 @@ public class DashBoard extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_SHORT).show();
-        userImage = UserImage.getInstance();
-        GlideApp.with(DashBoard.this /* context */)
-                .load(mStorageRef.child(user.getImageurl()))
-                .signature(new ObjectKey(userImage.getDate()))
-                .error(R.drawable.usericon)
-                .into(imageView);
-        GlideApp.with(DashBoard.this /* context */)
-                .load(mStorageRef.child(user.getImageurl()))
-                .signature(new ObjectKey(userImage.getDate()))
-                .error(R.drawable.usericon)
-                .into(userpic);
+        if (resultCode == Activity.RESULT_CANCELED) {
+            userImage = UserImage.getInstance();
+            GlideApp.with(DashBoard.this /* context */)
+                    .load(mStorageRef.child(user.getImageurl()))
+                    .signature(new ObjectKey(userImage.getDate()))
+                    .error(R.drawable.usericon)
+                    .into(imageView);
+            GlideApp.with(DashBoard.this /* context */)
+                    .load(mStorageRef.child(user.getImageurl()))
+                    .signature(new ObjectKey(userImage.getDate()))
+                    .error(R.drawable.usericon)
+                    .into(userpic);
+        }
     }
 }
